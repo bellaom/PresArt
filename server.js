@@ -4,7 +4,7 @@ const app = express();
 
 // Configuración de puerto
 // Solo definimos el puerto una vez y usamos el 80 por defecto
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 80;
 
 // Configuración de DDNS
 const DDNS_HOST = process.env.DDNS_HOST || 'localhost';
