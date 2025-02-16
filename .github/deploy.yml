@@ -1,0 +1,21 @@
+name: Deploy Workflow
+
+on:
+  push:
+    branches:
+      - main  # Cuando se haga push en master
+
+jobs:
+  deploy:
+    runs-on: self-hosted  # Usa el runner en EC2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Instalar dependencias
+        run: |
+          npm install
+      
+      - name: Reiniciar servidor con PM2
+        run: |
+          pm2 reload PresArt
