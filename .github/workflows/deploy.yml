@@ -11,11 +11,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
-      - name: Instalar dependencias
-        run: |
-          npm install
       
       - name: Reiniciar servidor con PM2
         run: |
+          npm install
+          npm install express
           sudo pm2 reload PresArt
