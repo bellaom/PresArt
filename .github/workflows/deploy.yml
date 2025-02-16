@@ -18,4 +18,4 @@ jobs:
       
       - name: Reiniciar servidor con PM2
         run: |
-          pm2 reload PresArt
+          sudo pm2 reload PresArt
