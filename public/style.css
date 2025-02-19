@@ -1,0 +1,84 @@
+:root {
+    --primary-color: #1B1B1B;         /* Negro profundo para texto principal */
+    --secondary-color: #F5F5F0;       /* Beige claro para fondos */
+    --accent-color: #8B0000;          /* Rojo oscuro tipo museo */
+    --text-color: #2B2B2B;            /* Negro suave para texto general */
+    --card-bg: #FFFFFF;               /* Blanco para tarjetas */
+    --border-radius: 10px;
+    --gold-accent: #B8860B;           /* Dorado suave para detalles */
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+.header-section {
+    background-color: var(--primary-color);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+}
+
+.museum-title {
+    font-size: 2.5rem;
+    color: var(--card-bg);
+    font-weight: 300;
+    text-align: center;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.data-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-bottom: 3px solid var(--accent-color);
+}
+
+.data-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+}
+
+.data-title {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.data-value {
+    font-size: 2rem;
+    color: var(--primary-color);
+    font-weight: 300;
+}
+
+.image-section {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-top: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    min-height: 300px;
+    border-left: 3px solid var(--gold-accent);
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 300px;
+    background-color: var(--secondary-color);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    font-style: italic;
+}
