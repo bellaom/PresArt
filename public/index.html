@@ -4,54 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preservation Art for Museums</title>
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container-fluid">
-        <!-- Header Section -->
-        <div class="header-section">
-            <h1 class="museum-title">Preservation Art for Museums</h1>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <!-- Sensor Data Cards -->
-                <div class="col-md-4">
-                    <div class="data-card">
-                        <div class="data-title">Temperature</div>
-                        <div class="data-value">--°C</div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="data-card">
-                        <div class="data-title">Humidity</div>
-                        <div class="data-value">--%</div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="data-card">
-                        <div class="data-title">luminosity</div>
-                        <div class="data-value">-- lux</div>
-                    </div>
-                </div>
+    <div class="container-fluid bg-light min-vh-100">
+        <!-- Encabezado -->
+        <header class="bg-dark text-white py-4 mb-4 shadow-sm">
+            <div class="container text-center">
+                <h1 class="museum-title mb-0">Preservation Art for Museums</h1>
             </div>
+        </header>
 
-            <!-- Image Section -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="image-section">
-                        <div class="image-placeholder">
-                            Image area
+        <!-- Tarjetas de datos de sensores -->
+        <main class="container">
+            <div class="row g-4">
+                <!-- Temperatura -->
+                <div class="col-md-4">
+                    <div class="card data-card text-center shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-danger">Temperature</h5>
+                            <p class="card-text data-value" id="temperature-value">--°C</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Humedad -->
+                <div class="col-md-4">
+                    <div class="card data-card text-center shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-danger">Humidity</h5>
+                            <p class="card-text data-value" id="humidity-value">--%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Luminosidad -->
+                <div class="col-md-4">
+                    <div class="card data-card text-center shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-danger">Luminosity</h5>
+                            <p class="card-text data-value" id="luminosity-value">-- lux</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <!-- Sección de imagen -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="image-section p-4 shadow-sm rounded">
+                        <div class="image-placeholder">
+                            <span class="text-muted">Image area</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script personalizado -->
+    <script src="script.js"></script>
 </body>
 </html>
