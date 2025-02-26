@@ -17,7 +17,7 @@ jobs:
           npm install
           npm install express
           npm install dotenv
-          pm2 reload PresArt
+          sudo E pm2 reload PresArt
         env:
           DDNS_HOST: ${{ secrets.DDNS_HOST }}
           DB_HOST: ${{ secrets.DB_HOST }}
