@@ -80,7 +80,6 @@ app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
 
-// Iniciar el servidor
-app.listen(port, () => {
-    console.log(`Servidor corriendo en http://${DDNS_HOST}`);
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Servidor corriendo en http://${DDNS_HOST}:${port}`);
 });
