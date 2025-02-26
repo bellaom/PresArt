@@ -3,7 +3,15 @@ const path = require('path');
 const mysql = require('mysql2');
 const app = express();
 
-const port = process.env.PORT || 3000;
+// Verificar si las variables de entorno se cargan correctamente
+console.log('DDNS_HOST:', process.env.DDNS_HOST);
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+console.log('DB_DATABASE:', process.env.DB_DATABASE);
+console.log('PORT:', process.env.PORT);
+
+const port = process.env.PORT || 80;
 const DDNS_HOST = process.env.DDNS_HOST;
 
 // Configuración del pool de conexiones a la RDS
