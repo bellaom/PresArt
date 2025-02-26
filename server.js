@@ -4,8 +4,8 @@ const express = require('express');
 const path = require('path');
 const mysql = require('mysql2');
 const app = express();
+const port = 80; 
 
-const port = process.env.PORT || 5000;
 const DDNS_HOST = process.env.DDNS_HOST;
 
 // Configuración del pool de conexiones a la RDS
