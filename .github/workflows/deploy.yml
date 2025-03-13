@@ -17,6 +17,7 @@ jobs:
           npm install
           npm install express
           npm install dotenv
+          npm install mysql2
           pm2 reload PresArt
         env:
           DDNS_HOST: ${{ secrets.DDNS_HOST }}
