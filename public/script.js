@@ -1,5 +1,7 @@
 
 
+let chart = null; 
+
 // Función para obtener los datos de los sensores desde el servidor y actualizar la interfaz
 function updateSensorData() {
     fetch('/sensor-data')
@@ -33,44 +35,55 @@ document.getElementById('fetch-historical').addEventListener('click', () => {
         .catch(error => console.error('Error obteniendo datos históricos:', error));
 });
 
-function plotGraph(data) {
-    const labels = data.map(item => item.timestamp);
-    const tempData = data.map(item => item.temperatura);
-    const humidityData = data.map(item => item.humedad);
-    const luminosityData = data.map(item => item.luminosidad);
 
-    const ctx = document.getElementById('historicalChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Temperatura (°C)',
-                    data: tempData,
-                    borderColor: 'red',
-                    fill: false
-                },
-                {
-                    label: 'Humedad (%)',
-                    data: humidityData,
-                    borderColor: 'blue',
-                    fill: false
-                },
-                {
-                    label: 'Luminosidad (lux)',
-                    data: luminosityData,
-                    borderColor: 'green',
-                    fill: false
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
+function plotGraph(data) {
+    try {
+        // Si ya existe un gráfico, destruirlo
+        if (chart) {
+            chart.destroy();
         }
-    });
+
+        const labels = data.map(item => item.timestamp);
+        const tempData = data.map(item => item.temperatura);
+        const humidityData = data.map(item => item.humedad);
+        const luminosityData = data.map(item => item.luminosidad);
+
+        const ctx = document.getElementById('historicalChart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Temperatura (°C)',
+                        data: tempData,
+                        borderColor: 'red',
+                        fill: false
+                    },
+                    {
+                        label: 'Humedad (%)',
+                        data: humidityData,
+                        borderColor: 'blue',
+                        fill: false
+                    },
+                    {
+                        label: 'Luminosidad (lux)',
+                        data: luminosityData,
+                        borderColor: 'green',
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    } catch (error) {
+        console.error('Error obteniendo datos históricos:', error);
+    }
 }
+
 
 // Botón de descarga de PDF
 document.getElementById('download-pdf').addEventListener('click', () => {
