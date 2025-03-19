@@ -1,11 +1,11 @@
 :root {
-    --primary-color: #1B1B1B;         /* Negro profundo para texto principal */
-    --secondary-color: #F5F5F0;       /* Beige claro para fondos */
-    --accent-color: #8B0000;          /* Rojo oscuro tipo museo */
-    --text-color: #2B2B2B;            /* Negro suave para texto general */
-    --card-bg: #FFFFFF;               /* Blanco para tarjetas */
+    --primary-color: #1B1B1B; /* Negro profundo */
+    --secondary-color: #F5F5F0; /* Beige claro */
+    --accent-color: #8B0000; /* Rojo burdeos */
+    --text-color: #2B2B2B; /* Negro suave */
+    --gold-accent: #B8860B; /* Dorado */
+    --card-bg: #FFFFFF; /* Blanco */
     --border-radius: 10px;
-    --gold-accent: #B8860B;           /* Dorado suave para detalles */
 }
 
 body {
@@ -14,71 +14,103 @@ body {
     color: var(--text-color);
 }
 
-.header-section {
+/* Barra de navegación elegante */
+.custom-navbar {
     background-color: var(--primary-color);
-    padding: 2.5rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.museum-title {
-    font-size: 2.5rem;
-    color: var(--card-bg);
-    font-weight: 300;
-    text-align: center;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--gold-accent);
+    display: flex;
+    align-items: center;
 }
 
+.logo {
+    width: 100px;
+    height: auto;
+    margin-right: 10px;
+}
+
+/* Tarjetas refinadas */
 .data-card {
     background: var(--card-bg);
     border-radius: var(--border-radius);
     padding: 1.5rem;
     margin-bottom: 1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-    transition: transform 0.2s, box-shadow 0.2s;
     border-bottom: 3px solid var(--accent-color);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .data-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-.data-title {
-    color: var(--accent-color);
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.data-value {
-    font-size: 2rem;
-    color: var(--primary-color);
-    font-weight: 300;
-}
-
-.image-section {
+/* Sección de consulta de datos históricos */
+.historical-section {
     background: var(--card-bg);
     border-radius: var(--border-radius);
-    padding: 1.5rem;
-    margin-top: 1rem;
+    padding: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-    min-height: 300px;
-    border-left: 3px solid var(--gold-accent);
+    text-align: center;
 }
 
-.image-placeholder {
-    width: 100%;
-    height: 300px;
-    background-color: var(--secondary-color);
-    border-radius: var(--border-radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.historical-section h3 {
+    color: var(--accent-color);
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.historical-section label {
+    font-weight: bold;
     color: var(--text-color);
-    font-style: italic;
+}
+
+.historical-section .form-control {
+    border: 1px solid var(--text-color);
+    border-radius: var(--border-radius);
+}
+
+.historical-section .btn {
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: var(--border-radius);
+    transition: background 0.3s, transform 0.2s;
+}
+
+.historical-section .btn-danger {
+    background: var(--accent-color);
+    border: none;
+}
+
+.historical-section .btn-danger:hover {
+    background: #600000;
+    transform: translateY(-2px);
+}
+
+.historical-section .btn-warning {
+    background: var(--gold-accent);
+    border: none;
+    color: white;
+}
+
+.historical-section .btn-warning:hover {
+    background: #8A6508;
+    transform: translateY(-2px);
+}
+
+/* Gráfica */
+.chart-container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
