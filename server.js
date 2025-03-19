@@ -75,6 +75,86 @@ app.get('/sensor-data', (req, res) => {
     res.json(sensorData);
 });
 
+// Nueva ruta para obtener datos históricos
+app.get('/historical-data', (req, res) => {
+    let { startDate, endDate, date } = req.query;
+
+    if (date) {
+        startDate = date;
+        endDate = date;
+    }
+
+    if (!startDate || !endDate) {
+        return res.status(400).json({ error: "Se requiere una fecha o un rango de fechas" });
+    }
+
+    const query = `
+        SELECT humedad, temperatura, luminosidad, timestamp 
+        FROM sensores_data 
+        WHERE timestamp BETWEEN ? AND ? 
+        ORDER BY timestamp ASC;
+    `;
+
+    pool.query(query, [startDate, endDate], (err, results) => {
+        if (err) {
+            console.error('Error al obtener datos históricos:', err);
+            return res.status(500).json({ error: "Error al obtener datos" });
+        }
+        res.json(results);
+    });
+});
+
+
+
+// Nueva ruta para generar un PDF con datos históricos
+app.get('/download-pdf', (req, res) => {
+    let { startDate, endDate, date } = req.query;
+
+    if (date) {
+        startDate = date;
+        endDate = date;
+    }
+
+    if (!startDate || !endDate) {
+        return res.status(400).json({ error: "Se requiere una fecha o un rango de fechas" });
+    }
+
+    const query = `
+        SELECT humedad, temperatura, luminosidad, timestamp 
+        FROM sensores_data 
+        WHERE timestamp BETWEEN ? AND ? 
+        ORDER BY timestamp ASC;
+    `;
+
+    pool.query(query, [startDate, endDate], (err, results) => {
+        if (err) {
+            console.error('Error al obtener datos para PDF:', err);
+            return res.status(500).json({ error: "Error al generar el PDF" });
+        }
+
+        // Crear el PDF
+        const doc = new pdfkit();
+        const filename = `historico_${startDate}_${endDate}.pdf`;
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.setHeader('Content-Type', 'application/pdf');
+
+        doc.pipe(res);
+        doc.fontSize(16).text(`Datos históricos (${startDate} - ${endDate})`, { align: 'center' });
+        doc.moveDown();
+
+        results.forEach(row => {
+            doc.fontSize(12).text(`Fecha: ${row.timestamp}`);
+            doc.text(`Temperatura: ${row.temperatura}°C`);
+            doc.text(`Humedad: ${row.humedad}%`);
+            doc.text(`Luminosidad: ${row.luminosidad} lux`);
+            doc.moveDown();
+        });
+
+        doc.end();
+    });
+});
+
+
 // Manejador de errores 404
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
