@@ -128,10 +128,19 @@ document.getElementById('download-pdf').addEventListener('click', () => {
             // Datos en la tabla
             doc.setFont('helvetica', 'normal');
             data.forEach(row => {
-                doc.text(row.timestamp, 10, y);
-                doc.text(row.temperatura.toString(), 60, y);
-                doc.text(row.humedad.toString(), 110, y);
-                doc.text(row.luminosidad.toString(), 160, y);
+                // Reducción de la fecha a solo el día (sin hora)
+                const date = row.timestamp.split(' ')[0]; // Obtener solo la fecha (sin la hora)
+
+                // Formateo de los valores para no mostrar decimales
+                const temp = row.temperatura.toFixed(1); // Solo un decimal
+                const humidity = row.humedad.toFixed(0); // Sin decimales
+                const luminosity = row.luminosidad.toFixed(0); // Sin decimales
+
+                // Escribir los valores en el PDF
+                doc.text(date, 10, y);
+                doc.text(temp, 60, y);
+                doc.text(humidity, 110, y);
+                doc.text(luminosity, 160, y);
                 y += 10;
 
                 // Línea divisoria después de cada fila
@@ -146,4 +155,3 @@ document.getElementById('download-pdf').addEventListener('click', () => {
         })
         .catch(error => console.error('Error obteniendo datos históricos para el PDF:', error));
 });
-
