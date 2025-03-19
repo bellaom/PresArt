@@ -107,10 +107,16 @@ body {
 
 /* Gráfica */
 .chart-container {
-    width: 80%;
+    width: 90%; /* Ajusta el tamaño según lo necesites */
+    height: 500px; /* Ajusta la altura para que se vea más grande */
     margin: auto;
     padding: 20px;
     background: var(--card-bg);
     border-radius: var(--border-radius);
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+#historicalChart {
+    width: 100% !important;  /* Asegura que ocupe todo el contenedor */
+    height: 100% !important; /* Asegura que ocupe todo el contenedor */
 }
