@@ -98,11 +98,11 @@ document.getElementById('download-pdf').addEventListener('click', () => {
     fetch(`/historical-data?startDate=${startDate}&endDate=${endDate}`)
         .then(response => response.json())
         .then(data => {
-            // Crear PDF en el cliente
+            // Crear el PDF en el cliente
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
-            // Encabezado
+
+            // Título y encabezado
             doc.setFontSize(18);
             doc.setFont('helvetica', 'bold');
             doc.text('Datos Históricos', 105, 15, null, null, 'center');  // Título
@@ -113,7 +113,7 @@ document.getElementById('download-pdf').addEventListener('click', () => {
             // Espacio
             doc.setFontSize(12);
             doc.text('Información de los sensores:', 10, 40);
-            doc.line(10, 42, 200, 42); // Línea debajo del título de sección
+            doc.line(10, 42, 200, 42); // Línea debajo del título de la sección
 
             // Encabezado de la tabla
             let y = 50;
