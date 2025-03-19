@@ -85,7 +85,7 @@ function plotGraph(data) {
 }
 
 
-// Botón de descarga de PDF
+// Función para generar el PDF en el cliente
 document.getElementById('download-pdf').addEventListener('click', () => {
     const startDate = document.getElementById('start-date').value;
     const endDate = document.getElementById('end-date').value;
@@ -95,5 +95,30 @@ document.getElementById('download-pdf').addEventListener('click', () => {
         return;
     }
 
-    window.open(`/download-pdf?startDate=${startDate}&endDate=${endDate}`, '_blank');
+    fetch(`/historical-data?startDate=${startDate}&endDate=${endDate}`)
+        .then(response => response.json())
+        .then(data => {
+            // Generar el PDF en el cliente
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text(`Datos históricos (${startDate} - ${endDate})`, 105, 10, null, null, 'center');
+            doc.setFontSize(12);
+            doc.text(`Fecha: ${startDate} - ${endDate}`, 10, 20);
+
+            // Añadir los datos al PDF
+            let y = 30;
+            data.forEach(row => {
+                doc.text(`Fecha: ${row.timestamp}`, 10, y);
+                doc.text(`Temperatura: ${row.temperatura}°C`, 10, y + 5);
+                doc.text(`Humedad: ${row.humedad}%`, 10, y + 10);
+                doc.text(`Luminosidad: ${row.luminosidad} lux`, 10, y + 15);
+                y += 20;
+            });
+
+            // Descargar el PDF
+            doc.save(`historico_${startDate}_${endDate}.pdf`);
+        })
+        .catch(error => console.error('Error obteniendo datos históricos para el PDF:', error));
 });
+
