@@ -98,27 +98,51 @@ document.getElementById('download-pdf').addEventListener('click', () => {
     fetch(`/historical-data?startDate=${startDate}&endDate=${endDate}`)
         .then(response => response.json())
         .then(data => {
-            // Generar el PDF en el cliente
+            // Crear PDF en el cliente
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            doc.setFontSize(16);
-            doc.text(`Datos históricos (${startDate} - ${endDate})`, 105, 10, null, null, 'center');
-            doc.setFontSize(12);
-            doc.text(`Fecha: ${startDate} - ${endDate}`, 10, 20);
+            
+            // Encabezado
+            doc.setFontSize(18);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Datos Históricos', 105, 15, null, null, 'center');  // Título
+            doc.setFontSize(14);
+            doc.text(`Rango de fechas: ${startDate} - ${endDate}`, 105, 25, null, null, 'center');
+            doc.line(10, 30, 200, 30); // Línea debajo del encabezado
 
-            // Añadir los datos al PDF
-            let y = 30;
+            // Espacio
+            doc.setFontSize(12);
+            doc.text('Información de los sensores:', 10, 40);
+            doc.line(10, 42, 200, 42); // Línea debajo del título de sección
+
+            // Encabezado de la tabla
+            let y = 50;
+            doc.setFont('helvetica', 'bold');
+            doc.text('Fecha', 10, y);
+            doc.text('Temperatura (°C)', 55, y);
+            doc.text('Humedad (%)', 100, y);
+            doc.text('Luminosidad (lux)', 145, y);
+            doc.line(10, y + 2, 200, y + 2); // Línea debajo del encabezado de la tabla
+            y += 10;
+
+            // Datos en la tabla
+            doc.setFont('helvetica', 'normal');
             data.forEach(row => {
-                doc.text(`Fecha: ${row.timestamp}`, 10, y);
-                doc.text(`Temperatura: ${row.temperatura}°C`, 10, y + 5);
-                doc.text(`Humedad: ${row.humedad}%`, 10, y + 10);
-                doc.text(`Luminosidad: ${row.luminosidad} lux`, 10, y + 15);
-                y += 20;
+                doc.text(row.timestamp, 10, y);
+                doc.text(row.temperatura.toString(), 55, y);
+                doc.text(row.humedad.toString(), 100, y);
+                doc.text(row.luminosidad.toString(), 145, y);
+                y += 10;
+
+                // Línea divisoria después de cada fila
+                doc.line(10, y, 200, y);
             });
+
+            // Espacio en blanco antes de terminar el PDF
+            doc.text('Fin de los datos', 10, y + 10);
 
             // Descargar el PDF
             doc.save(`historico_${startDate}_${endDate}.pdf`);
         })
         .catch(error => console.error('Error obteniendo datos históricos para el PDF:', error));
 });
-
