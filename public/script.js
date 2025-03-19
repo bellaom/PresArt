@@ -119,9 +119,9 @@ document.getElementById('download-pdf').addEventListener('click', () => {
             let y = 50;
             doc.setFont('helvetica', 'bold');
             doc.text('Fecha', 10, y);
-            doc.text('Temperatura (°C)', 55, y);
-            doc.text('Humedad (%)', 100, y);
-            doc.text('Luminosidad (lux)', 145, y);
+            doc.text('Temperatura (°C)', 60, y);   // Ajusté la posición para que no se sobreponga
+            doc.text('Humedad (%)', 110, y);      // Ajusté la posición
+            doc.text('Luminosidad (lux)', 160, y); // Ajusté la posición
             doc.line(10, y + 2, 200, y + 2); // Línea debajo del encabezado de la tabla
             y += 10;
 
@@ -129,9 +129,9 @@ document.getElementById('download-pdf').addEventListener('click', () => {
             doc.setFont('helvetica', 'normal');
             data.forEach(row => {
                 doc.text(row.timestamp, 10, y);
-                doc.text(row.temperatura.toString(), 55, y);
-                doc.text(row.humedad.toString(), 100, y);
-                doc.text(row.luminosidad.toString(), 145, y);
+                doc.text(row.temperatura.toString(), 60, y);
+                doc.text(row.humedad.toString(), 110, y);
+                doc.text(row.luminosidad.toString(), 160, y);
                 y += 10;
 
                 // Línea divisoria después de cada fila
@@ -146,3 +146,4 @@ document.getElementById('download-pdf').addEventListener('click', () => {
         })
         .catch(error => console.error('Error obteniendo datos históricos para el PDF:', error));
 });
+
