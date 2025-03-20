@@ -14,28 +14,19 @@ body {
     color: var(--text-color);
 }
 
-/* Barra de navegación elegante */
-.custom-navbar {
-    background-color: var(--primary-color);
-    padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+/* Estilo para el contenedor del logo */
+.logo-container {
+    padding-top: 20px; /* Ajusta el espacio encima del logo */
+    text-align: center; /* Centra el logo */
 }
 
-.navbar-brand {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--gold-accent);
-    display: flex;
-    align-items: center;
-}
-
+/* Estilo del logo */
 .logo {
-    width: 100px;
+    width: 210px; /* Ajusta el tamaño del logo si es necesario */
     height: auto;
-    margin-right: 10px;
 }
 
-/* Tarjetas refinadas */
+/* Estilo de las tarjetas de datos en columna vertical */
 .data-card {
     background: var(--card-bg);
     border-radius: var(--border-radius);
@@ -44,11 +35,20 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
     border-bottom: 3px solid var(--accent-color);
     transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 1.4rem;
 }
 
+/* Efecto hover para las tarjetas de datos */
 .data-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Contenedor de los datos en la columna izquierda */
+.left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 /* Sección de consulta de datos históricos */
@@ -119,4 +119,29 @@ body {
 #historicalChart {
     width: 100% !important;  /* Asegura que ocupe todo el contenedor */
     height: 100% !important; /* Asegura que ocupe todo el contenedor */
+}
+
+/* Estilo para la disposición en columnas */
+.container-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 30%; /* Define el ancho de la columna izquierda */
+}
+
+.right-column {
+    width: 65%; /* Define el ancho de la columna derecha */
+}
+
+/* Asegura que la gráfica sea responsiva */
+.chart-container {
+    width: 100%;
+    height: 400px; /* Ajusta la altura en pantallas más pequeñas */
 }
