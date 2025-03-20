@@ -27,6 +27,15 @@ document.getElementById('fetch-historical').addEventListener('click', () => {
         return;
     }
 
+    //Bloquer busqueda de fechas para evitar rangos erroneos
+    startDate.addEventListener("change", function () {
+        endDate.min = startDate.value;
+    });
+
+    endDate.addEventListener("change", function () {
+        startDate.max = endDate.value
+    });
+
     fetch(`/historical-data?startDate=${startDate}&endDate=${endDate}`)
         .then(response => response.json())
         .then(data => {
