@@ -9,30 +9,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Incluir Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Agregar jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+    <!-- Agregar jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <!-- Estilos personalizados -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container-fluid bg-light min-vh-100">
-        <!-- Barra superior -->
-        <nav class="navbar navbar-dark custom-navbar">
-            <div class="container">
-                <a class="navbar-brand" href="#">
-                    <img src="imagenes/logo.png" alt="Museo" class="logo"> Museum Monitoring
-                </a>
-            </div>
-        </nav>
+        <!-- Contenedor del logo -->
+        <div class="logo-container text-center pt-4">
+            <img src="imagenes/logo.png" alt="Museo" class="logo">
+        </div>
 
         <!-- Contenido principal -->
         <main class="container mt-4">
-            <div class="row g-4 justify-content-center">
-                <!-- Temperatura -->
+            <div class="row g-4">
+                <!-- Contenedores de datos a la izquierda -->
                 <div class="col-md-4">
                     <div class="card data-card text-center shadow-sm">
                         <div class="card-body">
@@ -40,20 +35,12 @@
                             <p class="card-text data-value" id="temperature-value">--°C</p>
                         </div>
                     </div>
-                </div>
-
-                <!-- Humedad -->
-                <div class="col-md-4">
                     <div class="card data-card text-center shadow-sm">
                         <div class="card-body">
                             <h5 class="card-title text-danger">Humidity</h5>
                             <p class="card-text data-value" id="humidity-value">--%</p>
                         </div>
                     </div>
-                </div>
-
-                <!-- Luminosidad -->
-                <div class="col-md-4">
                     <div class="card data-card text-center shadow-sm">
                         <div class="card-body">
                             <h5 class="card-title text-danger">Luminosity</h5>
@@ -61,29 +48,31 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Sección de consulta de datos históricos -->
-            <div class="historical-section mt-4 p-4 text-center">
-                <div class="row justify-content-center">
-                    <div class="col-md-4">
-                        <label for="start-date" class="form-label">Fecha de inicio:</label>
-                        <input type="date" id="start-date" class="form-control">
+                <!-- Contenedor de los datos históricos a la derecha -->
+                <div class="col-md-8">
+                    <div class="historical-section mt-4 p-4 text-center">
+                        <div class="row justify-content-center">
+                            <div class="col-md-4">
+                                <label for="start-date" class="form-label">Fecha de inicio:</label>
+                                <input type="date" id="start-date" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="end-date" class="form-label">Fecha de fin:</label>
+                                <input type="date" id="end-date" class="form-control">
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button id="fetch-historical" class="btn btn-danger mx-2">Generar Gráfica</button>
+                                <button id="download-pdf" class="btn btn-warning">Descargar PDF</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <label for="end-date" class="form-label">Fecha de fin:</label>
-                        <input type="date" id="end-date" class="form-control">
-                    </div>
-                    <div class="col-md-4 d-flex align-items-end">
-                        <button id="fetch-historical" class="btn btn-danger mx-2">Generar Gráfica</button>
-                        <button id="download-pdf" class="btn btn-warning">Descargar PDF</button>
+
+                    <!-- Gráfica -->
+                    <div class="chart-container text-center mt-4">
+                        <canvas id="historicalChart"></canvas>
                     </div>
                 </div>
-            </div>
-
-            <!-- Gráfica -->
-            <div class="chart-container text-center mt-4">
-                <canvas id="historicalChart"></canvas>
             </div>
         </main>
     </div>
