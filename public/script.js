@@ -18,6 +18,19 @@ function updateSensorData() {
 setInterval(updateSensorData, 30000);
 updateSensorData(); // Llamada inicial para mostrar los datos al cargar la página
 
+
+// Configurar restricciones de fechas
+const startDateInput = document.getElementById('start-date');
+const endDateInput = document.getElementById('end-date');
+
+startDateInput.addEventListener("change", function() {
+    endDateInput.min = startDateInput.value;
+});
+
+endDateInput.addEventListener("change", function() {
+    startDateInput.max = endDateInput.value;
+});
+
 document.getElementById('fetch-historical').addEventListener('click', () => {
     const startDate = document.getElementById('start-date').value;
     const endDate = document.getElementById('end-date').value;
@@ -26,15 +39,6 @@ document.getElementById('fetch-historical').addEventListener('click', () => {
         alert('Por favor, selecciona un rango de fechas.');
         return;
     }
-
-    //Bloquer busqueda de fechas para evitar rangos erroneos
-    startDate.addEventListener("change", function () {
-        endDate.min = startDate.value;
-    });
-
-    endDate.addEventListener("change", function () {
-        startDate.max = endDate.value
-    });
 
     fetch(`/historical-data?startDate=${startDate}&endDate=${endDate}`)
         .then(response => response.json())
