@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, File, UploadFile
+from fastapi import FastAPI, Request
 import mysql.connector
 from datetime import datetime 
 from fastapi.responses import JSONResponse
