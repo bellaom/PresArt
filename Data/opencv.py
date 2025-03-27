@@ -1,4 +1,6 @@
 import cv2 as cv
+from ultralytics import YOLO
+
 
 url = 'http://192.168.1.28:81/stream'
 cap = cv.VideoCapture(url)
