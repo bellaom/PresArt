@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Request
 import mysql.connector
 from datetime import datetime 
@@ -6,10 +7,10 @@ from fastapi.responses import JSONResponse
 app = FastAPI()
 
 db_config = {
-    "host": "db-pf.c326emuimr5u.us-east-1.rds.amazonaws.com",
-    "user": "admin",
-    "password": "cvib1506",
-    "database": "dbart"
+    "host": os.getenv("DB_HOST"),
+    "user": os.getenv("DB_USER"),
+    "password": os.getenv("DB_PASSWORD"),
+    "database": os.getenv("DB_DATABASE")
 }
 
 @app.get("/")
