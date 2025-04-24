@@ -30,13 +30,18 @@ jobs:
 
           # Instalar dependencias necesarias
           pip install --upgrade pip
-          pip install fastapi uvicorn mysql-connector-python
+          pip install fastapi uvicorn mysql-connector-python paho-mqtt opencv-python ultralytics
+
+        
 
           # Instalar dependencias de Node.js  
           npm install
           npm install express
           npm install dotenv
           npm install mysql2
+          npm install mqtt
+          npm install socket.io
+
 
           # Reiniciar servidores en PM2
           pm2 reload PresArt

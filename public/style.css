@@ -230,3 +230,92 @@ header .container {
     padding-top: 10px !important; /* Override Bootstrap's padding */
 }
 
+/* Contenedor de alertas */
+#alert-container {
+    z-index: 1055;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 350px;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+
+/* Estilo base para las alertas */
+.alert {
+    background-color: var(--accent-color); /* Rojo burdeos */
+    color: #fff;
+    border-radius: var(--border-radius);
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    font-weight: bold;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards; /* Animación para mostrar */
+    transform: translateX(100%); /* Se desliza desde la derecha */
+    animation: slideIn 0.5s forwards; /* Desliza la alerta */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+/* Animación para deslizamiento desde la derecha */
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(100%); /* Comienza fuera de la pantalla */
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0); /* En su posición original */
+    }
+}
+
+/* Animación para desaparecer la alerta */
+@keyframes slideOut {
+    0% {
+        opacity: 1;
+        transform: translateX(0); /* Empieza en su lugar */
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100%); /* Desaparece hacia la derecha */
+    }
+}
+
+/* Botón de cierre */
+.alert .btn-close {
+    color: #fff;
+    opacity: 0.8;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+}
+
+/* Botón de cierre al pasar el mouse */
+.alert .btn-close:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+}
+
+/* Efecto al ocultar la alerta */
+.d-none {
+    opacity: 0;
+    transform: translateX(100%); /* Se desliza hacia fuera */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+/* Estilo del texto */
+.alert strong {
+    font-weight: bold;
+}
+
+/* Efecto de transición al eliminar la alerta */
+.alert.hide {
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideOut 0.5s forwards;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
