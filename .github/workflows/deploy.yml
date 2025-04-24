@@ -26,8 +26,9 @@ jobs:
 
           # Reiniciar servidores en PM2
           pm2 reload PresArt
-          pm2 start uvicorn --name fastapi_app -- RDS_conect:app --host 0.0.0.0 --port 8000
-          pm2 reload fastapi_app
+          pm2 delete fastapi_app || true  # Elimina el proceso anterior si existe
+          pm2 start ./presart_venv/bin/uvicorn --name fastapi_app --interpreter python3 -- RDS_conect:app --host 0.0.0.0 --port 8000
+          
 
         
           
