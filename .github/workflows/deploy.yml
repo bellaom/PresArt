@@ -14,34 +14,15 @@ jobs:
       
       - name: Reiniciar servidor con PM2
         run: |
-          sudo apt update
-          sudo apt install -y python3.12-venv  # Instalar python3-venv si no está
+          # Copiar entorno Python
+          cp /home/ubuntu/venvs/presart_venv.tar.gz .
+          tar -xzf presart_venv.tar.gz
 
-          # Definir la ruta del entorno virtual
-          VENV_PATH="/home/ubuntu/actions-runner/_work/PresArt/PresArt/Data/venv"
-
-          # Verificar si el entorno virtual existe, si no, crearlo
-          if [ ! -d "$VENV_PATH" ]; then
-            python3 -m venv $VENV_PATH
-          fi
-
-          # Activar entorno virtual
-          source $VENV_PATH/bin/activate
-
-          # Instalar dependencias necesarias
-          pip install --upgrade pip
-          pip install fastapi uvicorn mysql-connector-python paho-mqtt opencv-python ultralytics
-
-        
-
-          # Instalar dependencias de Node.js  
+           # Activar entorno virtual de Python
+           source presart_venv/bin/activate
+           
+          #instalar dependencias npm
           npm install
-          npm install express
-          npm install dotenv
-          npm install mysql2
-          npm install mqtt
-          npm install socket.io
-
 
           # Reiniciar servidores en PM2
           pm2 reload PresArt
