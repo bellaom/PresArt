@@ -2,6 +2,10 @@ import { getSensorData, getHistoricalData } from './api.js';
 import { updateSensorDisplay, setupDateRestrictions } from './ui.js';
 import { plotGraph } from './charts.js';
 import { generatePDF } from './pdf.js';
+import { setupSocketIO } from './socket.js';
+
+// Iniciar socket.io
+setupSocketIO();
 
 // Función para actualizar datos de sensores cada 30 segundos
 async function updateSensorData() {
