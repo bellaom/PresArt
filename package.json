@@ -12,6 +12,8 @@
   "dependencies": {
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "mqtt": "^5.11.1",
     "mysql2": "^3.14.0",
     "socket.io": "^4.8.1",
