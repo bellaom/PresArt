@@ -1,3 +1,4 @@
+
 export function generatePDF(data, startDate, endDate) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -67,4 +68,5 @@ export function generatePDF(data, startDate, endDate) {
     // Guardar el archivo PDF
     doc.save(`historico_${startDate}_${endDate}.pdf`);
 }
+
 
