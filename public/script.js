@@ -2,6 +2,8 @@ import { getSensorData, getHistoricalData } from './api.js';
 import { updateSensorDisplay, setupDateRestrictions } from './ui.js';
 import { plotGraph } from './charts.js';
 import { generatePDF } from './pdf.js';
+import { initAlertSocket } from './alerts.js';
+
 
 // Función para actualizar datos de sensores cada 30 segundos
 async function updateSensorData() {
@@ -48,3 +50,5 @@ document.getElementById('download-pdf').addEventListener('click', async () => {
         generatePDF(data, startDate, endDate);
     }
 });
+
+initAlertSocket(); // Activar WebSocket para recibir alertas

@@ -4,10 +4,19 @@ const express = require('express');
 const path = require('path');
 const mysql = require('mysql2');
 const mqtt = require('mqtt');
-
+const WebSocket = require('ws');
+const winston = require('winston');
 
 const app = express();
 const port = 80; 
+
+// Configuración de logs con Winston
+const logger = winston.createLogger({
+    level: 'info',
+    transports: [
+        new winston.transports.File({ filename: 'mqtt_alertas.log' })
+    ]
+});
 
 // Configuración del servidor MQTT 
 const options = {
@@ -16,8 +25,8 @@ const options = {
     protocol: 'mqtt'
 };
 
-
 const DDNS_HOST = process.env.DDNS_HOST;
+
 // Conectar al servidor Mosquitto
 const client = mqtt.connect(options);
 
@@ -117,32 +126,53 @@ app.get('/historical-data', (req, res) => {
     });
 });
 
-// Conexión establecida
-client.on('connect', function () {
-    console.log('Conectado al servidor Mosquitto');
-    
-    // Suscribirse al tópico de alertas
-    client.subscribe('arte/alertas', function (err) {
+/////////////////////////////////////////////////////////////
+//Configuración general de MQTT Y Websocket
+
+// Configuración del servidor WebSocket
+const wss = new WebSocket.Server({ port: 8080 }); // WebSocket escuchando en el puerto 8080
+
+wss.on('connection', (ws) => {
+    console.log('Cliente WebSocket conectado');
+    // Guardar la conexión WebSocket para enviar mensajes
+    ws.on('message', (message) => {
+        console.log(`Mensaje recibido del cliente: ${message}`);
+    });
+});
+
+// Conexión al servidor MQTT
+mqttClient.on('connect', function () {
+    logger.info('Conectado al servidor Mosquitto');
+    mqttClient.subscribe('arte/alertas', function (err) {
         if (!err) {
-            console.log('Suscrito al tópico arte/alertas');
+            logger.info('Suscrito al tópico arte/alertas');
         } else {
-            console.error('Error al suscribirse al tópico: ', err);
+            logger.error('Error al suscribirse al tópico: ', err);
         }
     });
 });
 
-// Mensajes recibidos
-client.on('message', function (topic, message) {
-    console.log(`Mensaje recibido en ${topic}: ${message.toString()}`);
-    // Aquí también puedes agregar más detalles si lo deseas
+// Recibir mensajes de MQTT y transmitirlos a los clientes WebSocket
+mqttClient.on('message', function (topic, message) {
+    const alertMessage = message.toString();
     const timestamp = new Date().toISOString();
-    console.log(`[${timestamp}] Alerta recibida: ${message.toString()}`);
+    const logMessage = `[${timestamp}] Alerta recibida en ${topic}: ${alertMessage}`;
+    logger.info(logMessage);
+
+    // Enviar la alerta a todos los clientes WebSocket conectados
+    wss.clients.forEach(function (client) {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(logMessage); 
+        }
+    });
 });
 
-// Manejo de errores
-client.on('error', function (err) {
-    console.error('Error en la conexión:', err);
+mqttClient.on('error', function (err) {
+    logger.error('Error en la conexión MQTT:', err);
 });
+
+
+
 
 // Manejador de errores 404
 app.use((req, res) => {
