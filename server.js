@@ -10,7 +10,6 @@ const winston = require('winston');
 const app = express();
 const port = 80; 
 
-
 // Configuración de logs con Winston
 const logger = winston.createLogger({
     level: 'info',
@@ -29,7 +28,7 @@ const options = {
 const DDNS_HOST = process.env.DDNS_HOST;
 
 // Conectar al servidor Mosquitto
-const mqClient = mqtt.connect(options);
+const mqttClient = mqtt.connect(options);
 
 // Configuración del pool de conexiones a la RDS
 const pool = mysql.createPool({
