@@ -229,37 +229,39 @@ header .container {
 /* Estilo personalizado para las alertas en tiempo real */
 .custom-alert-container {
     margin-bottom: 1rem;
-}
-
-.popup-alert {
-    background-color: #f8d7da; /* Color de fondo tipo alerta */
-    color: #721c24; /* Color del texto */
-    border-radius: 15px; /* Bordes redondeados */
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra para el efecto de popup */
-    margin-bottom: 1rem;
-    font-weight: 600;
-    font-size: 1rem;
     position: fixed;
-    top: 20px; /* Distancia desde la parte superior */
-    right: 20px; /* Distancia desde la parte derecha */
-    z-index: 1050; /* Para que se quede por encima del contenido */
-    animation: fadeInSlide 0.5s ease-out; /* Animación al aparecer */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centrado */
+    z-index: 1050; /* Asegura que esté encima de otros elementos */
 }
 
-.popup-alert .alert-emoji {
+.custom-alert {
+    background-color: #f8d7da; /* Color rojo de alerta */
+    color: black;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 0.8rem;
+    font-weight: bold;
     font-size: 1.5rem;
-    margin-right: 10px;
+    text-align: center;
+    position: relative;
+    animation: fadeInSlide 0.6s ease-out;
 }
 
-.popup-alert .close-btn {
+.custom-alert strong {
+    font-size: 2rem; /* "WARNING" en grande */
+}
+
+.custom-alert .close-btn {
     position: absolute;
-    top: 8px;
-    right: 12px;
+    top: 10px;
+    right: 15px;
     background: none;
     border: none;
-    color: white;
-    font-size: 1.2rem;
+    color: black;
+    font-size: 1.5rem;
     cursor: pointer;
     font-weight: bold;
 }
@@ -275,14 +277,9 @@ header .container {
     }
 }
 
-/* Animación de desvanecimiento */
-.popup-alert.fade {
-    opacity: 0;
-    transform: translateY(-20px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.popup-alert.show {
-    opacity: 1;
-    transform: translateY(0);
+/* Animación de sonido */
+@keyframes beep {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
