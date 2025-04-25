@@ -130,7 +130,7 @@ app.get('/historical-data', (req, res) => {
 //Configuración general de MQTT Y Websocket
 
 // Configuración del servidor WebSocket
-const socket = new WebSocket('ws://presart.ddns.net:8080'); // WebSocket escuchando en el puerto 8080
+const wss = new WebSocket.Server({ port: 8080 });  // WebSocket escuchando en el puerto 8080
 
 wss.on('connection', (ws) => {
     console.log('Cliente WebSocket conectado');
