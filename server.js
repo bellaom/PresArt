@@ -3,10 +3,23 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const mysql = require('mysql2');
+const mqtt = require('mqtt');
+
+
 const app = express();
 const port = 80; 
 
+// Configuración del servidor MQTT 
+const options = {
+    host: 'localhost',   
+    port: 1883,        
+    protocol: 'mqtt'
+};
+
+
 const DDNS_HOST = process.env.DDNS_HOST;
+// Conectar al servidor Mosquitto
+const client = mqtt.connect(options);
 
 // Configuración del pool de conexiones a la RDS
 const pool = mysql.createPool({
@@ -75,7 +88,7 @@ app.get('/sensor-data', (req, res) => {
     res.json(sensorData);
 });
 
-// Nueva ruta para obtener datos históricos
+// ruta para obtener datos históricos
 app.get('/historical-data', (req, res) => {
     let { startDate, endDate, date } = req.query;
 
@@ -104,7 +117,32 @@ app.get('/historical-data', (req, res) => {
     });
 });
 
+// Conexión establecida
+client.on('connect', function () {
+    console.log('Conectado al servidor Mosquitto');
+    
+    // Suscribirse al tópico de alertas
+    client.subscribe('arte/alertas', function (err) {
+        if (!err) {
+            console.log('Suscrito al tópico arte/alertas');
+        } else {
+            console.error('Error al suscribirse al tópico: ', err);
+        }
+    });
+});
 
+// Mensajes recibidos
+client.on('message', function (topic, message) {
+    console.log(`Mensaje recibido en ${topic}: ${message.toString()}`);
+    // Aquí también puedes agregar más detalles si lo deseas
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] Alerta recibida: ${message.toString()}`);
+});
+
+// Manejo de errores
+client.on('error', function (err) {
+    console.error('Error en la conexión:', err);
+});
 
 // Manejador de errores 404
 app.use((req, res) => {
