@@ -1,34 +1,39 @@
 
 
 // Función para mostrar alertas en el frontend
+// Función para mostrar alertas en el frontend
 function showAlert(message) {
     const alertContainer = document.getElementById('alertContainer');
 
-    // Sonido de la alerta
+    // Crear el sonido de alerta
     const alertSound = new Audio('/imagenes/short-beep-countdown-81121.mp3'); // Ruta relativa
-    alertSound.play();
+    alertSound.play();  // Reproducir el sonido
 
     // Crear el div para la alerta
     const alertDiv = document.createElement('div');
-    alertDiv.classList.add('alert', 'alert-warning', 'alert-dismissible', 'fade', 'show');
+    alertDiv.classList.add('alert', 'alert-warning', 'alert-dismissible', 'fade', 'show', 'custom-alert');
     alertDiv.setAttribute('role', 'alert');
-
-    // Emoji de alerta y el mensaje
     alertDiv.innerHTML = `
-        <strong>🚨 WARNING 🚨</strong> ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <strong>🚨 WARNING 🚨</strong><br>${message}
+        <button type="button" class="btn-close close-btn" data-bs-dismiss="alert" aria-label="Close"></button>
     `;
 
     // Agregar la alerta al contenedor
     alertContainer.appendChild(alertDiv);
 
-    // Desaparecer la alerta después de 5 segundos
-    setTimeout(() => {
-        alertDiv.classList.remove('show');
-        alertDiv.classList.add('fade');
-    }, 5000); // El número es en milisegundos (5000ms = 5 segundos)
-}
+    // Animación de sonido
+    alertDiv.style.animation = 'beep 0.5s ease-out';
 
+    // Cerrar la alerta al hacer clic en la X
+    alertDiv.querySelector('.btn-close').addEventListener('click', () => {
+        alertDiv.remove();
+    });
+
+    // Auto-cerrar después de 10 segundos (si no se clickea la X)
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 10000);
+}
 
 
 
