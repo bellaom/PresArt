@@ -4,22 +4,35 @@
 function showAlert(message) {
     const alertContainer = document.getElementById('alertContainer');
 
+    // Crear el sonido de alerta
+    const alertSound = new Audio('https://www.soundjay.com/button/beep-07.wav');
+    alertSound.play();  // Reproducir el sonido
+
+    // Crear la alerta
     const alertDiv = document.createElement('div');
-    alertDiv.classList.add('alert', 'alert-warning', 'alert-dismissible', 'fade', 'show', 'popup-alert');
+    alertDiv.classList.add('alert', 'alert-warning', 'alert-dismissible', 'fade', 'show', 'custom-alert');
     alertDiv.setAttribute('role', 'alert');
     alertDiv.innerHTML = `
-        <span class="alert-emoji">⚠️</span>  <!-- Emoji de alerta -->
-        <strong>Alerta:</strong> ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <strong>WARNING</strong><br>${message}
+        <button type="button" class="btn-close close-btn" data-bs-dismiss="alert" aria-label="Close"></button>
     `;
 
     alertContainer.appendChild(alertDiv);
 
-    // Cerrar automáticamente la alerta después de 5 segundos
+    // Animación de sonido
+    alertDiv.style.animation = 'beep 0.5s ease-out';
+
+    // Cerrar la alerta al hacer clic en la X
+    alertDiv.querySelector('.btn-close').addEventListener('click', () => {
+        alertDiv.remove();
+    });
+
+    // Auto-cerrar después de 10 segundos (si no se clickea la X)
     setTimeout(() => {
-        alertDiv.classList.remove('show');
-    }, 5000);
+        alertDiv.remove();
+    }, 10000);
 }
+
 
 
 
