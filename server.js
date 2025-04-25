@@ -3,10 +3,17 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const mysql = require('mysql2');
+const mqtt = require('mqtt');
+const http = require('http');
+const { Server } = require('socket.io');
+
 const app = express();
-const port = 80; 
+const port = 80;
+const server = http.createServer(app);
+const io = new Server(server);
 
 const DDNS_HOST = process.env.DDNS_HOST;
+const client = mqtt.connect('mqtt://3.87.63.131');
 
 // Configuración del pool de conexiones a la RDS
 const pool = mysql.createPool({
@@ -31,6 +38,24 @@ let sensorData = {
     luminosidad: 'N/A',
     timestamp: 'N/A'
 };
+
+// Subscripción a cliente MQTT
+client.on('connect', () => {
+    console.log('✅ Conectado al broker MQTT');
+    client.subscribe('arte/alertas', (err) => {
+        if (err) {
+            console.error('❌ Error al suscribirse al tema arte/alertas:', err);
+        } else {
+            console.log('📡 Suscrito al tema arte/alertas');
+        }
+    });
+});
+
+client.on('message', (topic, message) => {
+    const alerta = message.toString();
+    console.log(`🚨 Alerta recibida (${topic}):`, alerta);
+    io.emit('nueva-alerta', alerta);  // Emitir al frontend por socket
+});
 
 // Función para consultar la base de datos
 function fetchSensorData() {
@@ -75,7 +100,7 @@ app.get('/sensor-data', (req, res) => {
     res.json(sensorData);
 });
 
-// Nueva ruta para obtener datos históricos
+// Ruta para obtener datos históricos
 app.get('/historical-data', (req, res) => {
     let { startDate, endDate, date } = req.query;
 
@@ -104,13 +129,17 @@ app.get('/historical-data', (req, res) => {
     });
 });
 
-
+// Conexión de socket.io
+io.on('connection', (socket) => {
+    console.log('🧩 Cliente conectado al socket');
+});
 
 // Manejador de errores 404
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
 
-app.listen(port, '0.0.0.0', () => {
+// Escuchar en el servidor HTTP (necesario para Socket.IO)
+server.listen(port, '0.0.0.0', () => {
     console.log(`Servidor corriendo en http://${DDNS_HOST}:${port}`);
 });
