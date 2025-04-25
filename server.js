@@ -29,7 +29,7 @@ const options = {
 const DDNS_HOST = process.env.DDNS_HOST;
 
 // Conectar al servidor Mosquitto
-const client = mqtt.connect(options);
+const mqttclient = mqtt.connect(options);
 
 // Configuración del pool de conexiones a la RDS
 const pool = mysql.createPool({
