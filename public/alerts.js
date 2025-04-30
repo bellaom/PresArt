@@ -1,9 +1,15 @@
 
 
-// Función para mostrar alertas en el frontend
-// Función para mostrar alertas en el frontend
+// Variable global para guardar el último mensaje mostrado
+let lastAlertMessage = null;
+
+// Función para mostrar alertas en el frontend 
 function showAlert(message) {
     const alertContainer = document.getElementById('alertContainer');
+
+    // Evitar mostrar la misma alerta consecutivamente
+    if (message === lastAlertMessage) return;
+    lastAlertMessage = message;
 
     // Crear el sonido de alerta
     const alertSound = new Audio('/imagenes/short-beep-countdown-81121.mp3'); // Ruta relativa
@@ -34,7 +40,6 @@ function showAlert(message) {
         alertDiv.remove();
     }, 10000);
 }
-
 
 
 // Función para inicializar conexión WebSocket y recibir alertas
