@@ -10,7 +10,8 @@ function showAlert(message) {
     // Evitar mostrar la misma alerta consecutivamente
     if (message === lastAlertMessage) return;
     lastAlertMessage = message;
-
+    
+    //prueba
     // Crear el sonido de alerta
     const alertSound = new Audio('/imagenes/short-beep-countdown-81121.mp3'); // Ruta relativa
     alertSound.play();  // Reproducir el sonido
