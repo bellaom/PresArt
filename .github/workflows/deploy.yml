@@ -24,7 +24,7 @@ jobs:
 
           # Reiniciar servidores en PM2
           pm2 reload PresArt
-          pm2 reload fastapi_ap
+          pm2 reload fastapi_app
           pm2 reload opencv
           
 
