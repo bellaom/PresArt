@@ -6,6 +6,8 @@ const mysql = require('mysql2');
 const mqtt = require('mqtt');
 const WebSocket = require('ws');
 const winston = require('winston');
+const bcrypt = require('bcrypt');
+const session = require('express-session');
 
 const app = express();
 const port = 80; 
@@ -182,3 +184,71 @@ app.use((req, res) => {
 app.listen(port, '0.0.0.0', () => {
     console.log(`Servidor corriendo en http://${DDNS_HOST}:${port}`);
 });
+
+
+/////////////////////////////////////////////////////////////
+//Configuración general de Login
+
+// Middleware para leer formularios
+app.use(express.urlencoded({ extended: false }));
+
+// Middleware para sesiones
+app.use(session({
+  secret: 'clave-secreta',
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+  
+    const query = 'SELECT * FROM users WHERE email = ?';
+    pool.query(query, [email], async (err, results) => {
+      if (err) return res.status(500).send('Error del servidor');
+  
+      if (results.length === 0) {
+        return res.send('Usuario no encontrado');
+      }
+  
+      const user = results[0];
+  
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        return res.send('Contraseña incorrecta');
+      }
+  
+      // Guardar sesión
+      req.session.user = {
+        id: user.id,
+        name: user.name,
+        email: user.email
+      };
+      // Redirigir a la página protegida
+      res.redirect('/');
+    });
+  });
+
+function isAuthenticated(req, res, next) {
+    if (req.session.user) {
+    return next(); // Todo bien, sigue
+}
+    res.redirect('/login'); // No está logueado
+}
+
+app.get('/', isAuthenticated, (req, res) => {
+    res.send(`Bienvenido ${req.session.user.name}`);
+  });
+
+app.get('/login', (req, res) => {
+    res.sendFile(__dirname + '/login.html');
+});
+
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+      if (err) {
+        return res.send('Error al cerrar sesión');
+      }
+      res.redirect('/login');
+    });
+});
+  
