@@ -105,7 +105,7 @@ function isAuthenticated(req, res, next) {
 
 // Rutas
 app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'login.html'));
+    res.sendFile(path.join(__dirname, 'public', 'views', 'login.html'));
 });
 
 app.post('/login', (req, res) => {
@@ -138,7 +138,7 @@ app.post('/login', (req, res) => {
 
 // Ruta principal protegida
 app.get('/', isAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+    res.sendFile(path.join(__dirname,  'public','views', 'index.html'));
 });
 
 // Logout
