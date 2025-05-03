@@ -243,7 +243,7 @@ app.get('/login', (req, res) => {
     res.sendFile(__dirname + '/login.html');
 });
 
-//logout
+//logout_ :p
 app.get('/logout', (req, res) => {
     req.session.destroy(err => {
       if (err) {
