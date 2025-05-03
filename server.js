@@ -89,9 +89,83 @@ fetchSensorData(); // Llamada inicial
 // Middleware para servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Ruta principal
-app.get('/', (req, res) => {
+// Middleware para verificar sesión
+function isAuthenticated(req, res, next) {
+  if (req.session.user) {
+    return next();
+  }
+  res.redirect('/login');
+}
+
+// Configuración de la sesión
+app.use(session({
+  secret: 'clave-secreta',
+  resave: false,
+  saveUninitialized: false
+}));
+
+// Middleware para parsear datos URL-encoded
+app.use(express.urlencoded({ extended: false }));
+
+// Rutas
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+
+// Ruta para procesar el login
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+  
+    const query = 'SELECT * FROM users WHERE email = ?';
+    pool.query(query, [email], async (err, results) => {
+      if (err) return res.status(500).send('Error del servidor');
+  
+      if (results.length === 0) {
+        return res.send('Usuario no encontrado');
+      }
+  
+      const user = results[0];
+      const passwordMatch = await bcrypt.compare(password, user.password);
+  
+      if (!passwordMatch) {
+        return res.send('Contraseña incorrecta');
+      }
+  
+      // Guardar sesión
+      req.session.user = {
+        id: user.id,
+        name: user.name,
+        email: user.email
+      };
+  
+      res.redirect('/');  // Redirige al home si el login es correcto
+    });
+  });
+  
+  // Ruta para la página principal (requiere autenticación)
+  app.get('/', (req, res) => {
+    if (!req.session.user) {
+      return res.redirect('/login');  // Redirige al login si no está autenticado
+    }
+  
+    // Si está autenticado, mostrar la página principal
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  })
+
+
+app.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.send('Error al cerrar sesión');
+    }
+    res.redirect('/login');
+  });
+});
+
+// Ruta protegida que solo se puede acceder si está autenticado
+app.get('/', isAuthenticated, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Ruta para obtener los datos en el frontend
@@ -175,7 +249,6 @@ mqttClient.on('error', function (err) {
 
 
 
-
 // Manejador de errores 404
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
@@ -184,72 +257,3 @@ app.use((req, res) => {
 app.listen(port, '0.0.0.0', () => {
     console.log(`Servidor corriendo en http://${DDNS_HOST}:${port}`);
 });
-
-
-/////////////////////////////////////////////////////////////
-//Configuración general de Login
-
-// Middleware para leer formularios
-app.use(express.urlencoded({ extended: false }));
-
-// Middleware para sesiones
-app.use(session({
-  secret: 'clave-secreta',
-  resave: false,
-  saveUninitialized: false
-}));
-
-app.post('/login', (req, res) => {
-    const { email, password } = req.body;
-  
-    const query = 'SELECT * FROM users WHERE email = ?';
-    pool.query(query, [email], async (err, results) => {
-      if (err) return res.status(500).send('Error del servidor');
-  
-      if (results.length === 0) {
-        return res.send('Usuario no encontrado');
-      }
-  
-      const user = results[0];
-  
-      const passwordMatch = await bcrypt.compare(password, user.password);
-      if (!passwordMatch) {
-        return res.send('Contraseña incorrecta');
-      }
-  
-      // Guardar sesión
-      req.session.user = {
-        id: user.id,
-        name: user.name,
-        email: user.email
-      };
-      // Redirigir a la página protegida
-      res.redirect('/');
-    });
-  });
-
-function isAuthenticated(req, res, next) {
-    if (req.session.user) {
-    return next(); // Todo bien, sigue
-}
-    res.redirect('/login'); // No está logueado
-}
-
-app.get('/', isAuthenticated, (req, res) => {
-    res.send(`Bienvenido ${req.session.user.name}`);
-  });
-
-app.get('/login', (req, res) => {
-    res.sendFile(__dirname + '/login.html');
-});
-
-//logout_ :p
-app.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-      if (err) {
-        return res.send('Error al cerrar sesión');
-      }
-      res.redirect('/login');
-    });
-});
-  
