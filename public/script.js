@@ -17,6 +17,7 @@ setInterval(updateSensorData, 30000);
 updateSensorData();
 
 // Configurar restricciones de fechas
+//mmmm
 setupDateRestrictions();
 
 // Evento para obtener datos históricos y graficar
