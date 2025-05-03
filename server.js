@@ -84,7 +84,11 @@ function fetchSensorData() {
 setInterval(fetchSensorData, 30000);
 fetchSensorData();
 
+
+
 // Middleware y sesiones
+
+  
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'clave-secreta',
@@ -101,7 +105,7 @@ function isAuthenticated(req, res, next) {
 
 // Rutas
 app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+    res.sendFile(path.join(__dirname, 'views', 'login.html'));
 });
 
 app.post('/login', (req, res) => {
@@ -134,7 +138,7 @@ app.post('/login', (req, res) => {
 
 // Ruta principal protegida
 app.get('/', isAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
 // Logout
