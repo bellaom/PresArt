@@ -3,6 +3,23 @@ import { updateSensorDisplay, setupDateRestrictions } from './ui.js';
 import { plotGraph } from './charts.js';
 import { generatePDF } from './pdf.js';
 import { initAlertSocket } from './alerts.js';
+import { enviarLogin } from './login.js';
+
+
+//Login import
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('loginForm');
+    
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+  
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+  
+      enviarLogin(email, password);
+    });
+  });
+
 
 
 // Función para actualizar datos de sensores cada 30 segundos
@@ -53,3 +70,4 @@ document.getElementById('download-pdf').addEventListener('click', async () => {
 });
 
 initAlertSocket(); // Activar WebSocket para recibir alertas
+
