@@ -38,7 +38,7 @@ const pool = mysql.createPool({
     database: process.env.DB_DATABASE
 });
 
-// Ejemplo de impresión para verificar las variables
+// Variables de entorno (debug)
 console.log('DDNS_HOST:', DDNS_HOST);
 console.log('DB_HOST:', process.env.DB_HOST);
 console.log('DB_USER:', process.env.DB_USER);
@@ -46,7 +46,7 @@ console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
 console.log('DB_DATABASE:', process.env.DB_DATABASE);
 console.log('PORT:', port);
 
-// Variable para almacenar los datos de sensores
+// Datos de sensores
 let sensorData = {
     humedad: 'N/A',
     temperatura: 'N/A',
@@ -54,7 +54,7 @@ let sensorData = {
     timestamp: 'N/A'
 };
 
-// Función para consultar la base de datos
+// Función para obtener datos recientes
 function fetchSensorData() {
     pool.query(
         `SELECT humedad, temperatura, luminosidad, timestamp 
@@ -80,98 +80,77 @@ function fetchSensorData() {
     );
 }
 
-// Consultar datos cada 30 segundos
+// Llamada inicial + intervalo
 setInterval(fetchSensorData, 30000);
-fetchSensorData(); // Llamada inicial
+fetchSensorData();
 
-// Middleware para servir archivos estáticos
+// Middleware y sesiones
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Middleware para verificar sesión
-function isAuthenticated(req, res, next) {
-  if (req.session.user) {
-    return next();
-  }
-  res.redirect('/login');
-}
-
-// Configuración de la sesión
 app.use(session({
-  secret: 'clave-secreta',
-  resave: false,
-  saveUninitialized: false
+    secret: 'clave-secreta',
+    resave: false,
+    saveUninitialized: false
 }));
-
-// Middleware para parsear datos URL-encoded
 app.use(express.urlencoded({ extended: false }));
+
+// Middleware de autenticación
+function isAuthenticated(req, res, next) {
+    if (req.session.user) return next();
+    res.redirect('/login');
+}
 
 // Rutas
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-
-// Ruta para procesar el login
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
-  
+
     const query = 'SELECT * FROM users WHERE email = ?';
     pool.query(query, [email], async (err, results) => {
-      if (err) return res.status(500).send('Error del servidor');
-  
-      if (results.length === 0) {
-        return res.send('Usuario no encontrado');
-      }
-  
-      const user = results[0];
-      const passwordMatch = await bcrypt.compare(password, user.password);
-  
-      if (!passwordMatch) {
-        return res.send('Contraseña incorrecta');
-      }
-  
-      // Guardar sesión
-      req.session.user = {
-        id: user.id,
-        name: user.name,
-        email: user.email
-      };
-  
-      res.redirect('/');  // Redirige al home si el login es correcto
+        if (err) return res.status(500).send('Error del servidor');
+
+        if (results.length === 0) {
+            return res.send('Usuario no encontrado');
+        }
+
+        const user = results[0];
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (!passwordMatch) {
+            return res.send('Contraseña incorrecta');
+        }
+
+        req.session.user = {
+            id: user.id,
+            name: user.name,
+            email: user.email
+        };
+
+        res.redirect('/');
     });
-  });
-  
-  // Ruta para la página principal (requiere autenticación)
-  app.get('/', (req, res) => {
-    if (!req.session.user) {
-      return res.redirect('/login');  // Redirige al login si no está autenticado
-    }
-  
-    // Si está autenticado, mostrar la página principal
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-  })
-
-
-app.get('/logout', (req, res) => {
-  req.session.destroy(err => {
-    if (err) {
-      return res.send('Error al cerrar sesión');
-    }
-    res.redirect('/login');
-  });
 });
 
-// Ruta protegida que solo se puede acceder si está autenticado
+// Ruta principal protegida
 app.get('/', isAuthenticated, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Ruta para obtener los datos en el frontend
+// Logout
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) return res.send('Error al cerrar sesión');
+        res.redirect('/login');
+    });
+});
+
+// Datos del sensor en tiempo real
 app.get('/sensor-data', (req, res) => {
     res.json(sensorData);
 });
 
-// ruta para obtener datos históricos
+// Datos históricos
 app.get('/historical-data', (req, res) => {
     let { startDate, endDate, date } = req.query;
 
@@ -200,21 +179,16 @@ app.get('/historical-data', (req, res) => {
     });
 });
 
-/////////////////////////////////////////////////////////////
-//Configuración general de MQTT Y Websocket
-
-// Configuración del servidor WebSocket
-const wss = new WebSocket.Server({ port: 8080 });  // WebSocket escuchando en el puerto 8080
+// WebSocket y MQTT
+const wss = new WebSocket.Server({ port: 8080 });
 
 wss.on('connection', (ws) => {
     console.log('Cliente WebSocket conectado');
-    // Guardar la conexión WebSocket para enviar mensajes
     ws.on('message', (message) => {
         console.log(`Mensaje recibido del cliente: ${message}`);
     });
 });
 
-// Conexión al servidor MQTT
 mqttClient.on('connect', function () {
     logger.info('Conectado al servidor Mosquitto');
     mqttClient.subscribe('arte/alertas', function (err) {
@@ -226,14 +200,12 @@ mqttClient.on('connect', function () {
     });
 });
 
-// Recibir mensajes de MQTT y transmitirlos a los clientes WebSocket
 mqttClient.on('message', function (topic, message) {
     const alertMessage = message.toString();
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] Alerta recibida en ${topic}: ${alertMessage}`;
     logger.info(logMessage);
 
-    // Enviar la alerta a todos los clientes WebSocket conectados
     wss.clients.forEach(function (client) {
         if (client.readyState === WebSocket.OPEN) {
             client.send(logMessage); 
@@ -245,13 +217,12 @@ mqttClient.on('error', function (err) {
     logger.error('Error en la conexión MQTT:', err);
 });
 
-
-
-// Manejador de errores 404
+// Error 404
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
 
+// Iniciar servidor
 app.listen(port, '0.0.0.0', () => {
     console.log(`Servidor corriendo en http://${DDNS_HOST}:${port}`);
 });
