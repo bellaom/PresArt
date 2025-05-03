@@ -5,36 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/public/style.css"> <!-- Agrega tu CSS personalizado -->
 </head>
 <body>
+
+  <header>
+    <div class="logo-container">
+      <img src="/public/imagenes/logo.png" alt="Logo del Museo" class="logo">
+    </div>
+  </header>
+
   <div class="login">
     <div class="row justify-content-center">
-      <div class="col-md-6">
-        <h2 class="text-center mt-5">Iniciar Sesión</h2>
+      <div class="col-md-6 col-lg-4">
+        <div class="login-card">
+          <h2 class="text-center">Welcome back, enter your credentials to continue.</h2>
 
-        <!-- Sin action ni method -->
-        <form id="loginForm">
-          <div class="form-group mb-3">
-            <label for="email">Correo Electrónico</label>
-            <input type="email" class="form-control" id="email" name="email" required />
-          </div>
-          <div class="form-group mb-3">
-            <label for="password">Contraseña</label>
-            <input type="password" class="form-control" id="password" name="password" required />
-          </div>
-          <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
-        </form>
+          <!-- Formulario de login -->
+          <form id="loginForm" method="POST" action="/login">
+            <div class="form-group mb-3">
+              <label for="email">Email Address</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" required />
+            </div>
+            <div class="form-group mb-3">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Sing In</button>
+          </form>
 
-        <!-- Para mostrar errores -->
-        <div id="error" class="text-danger mt-3 text-center"></div>
+          <!-- Para mostrar errores -->
+          <div id="error" class="text-danger mt-3 text-center"></div>
+        </div>
       </div>
     </div>
   </div>
+
+  <footer>
+    <p class="text-center">Welcome to Artci Monitoring System</p>
+  </footer>
 
   <!-- Bootstrap scripts (solo si los necesitas) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- Tu script modular -->
   <script type="module" src="/script.js"></script>
+
 </body>
 </html>

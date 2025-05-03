@@ -8,6 +8,9 @@
     --border-radius: 10px;
 }
 
+
+
+
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     background-color: var(--secondary-color);
@@ -17,25 +20,30 @@ body {
 
 /* Estilo para el header centrado */
 header {
-    background-color: #4A0000; /* Gris suave y elegante */
+    background-color: #4A0000;
     color: white;
-    border-radius: 20px; /* Bordes redondeados */
-    padding: 20px 40px; /* Espacio dentro del header */
-    width: 80%; /* No cubre toda la pantalla */
-    margin: 5px auto 15px; /* Reduced top margin and set bottom margin */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra para darle efecto de elevación */
+    border-radius: 20px;
+    padding: 20px 40px;
+    width: 90%;
+    margin: 15px auto;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra más sutil */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* Estilo para el contenedor del logo */
 .logo-container {
-    text-align: left; /* Alineación a la izquierda */
+    flex: 1;
+    display: flex;
+    justify-content: center;
 }
 
-/* Estilo del logo */
 .logo {
-    width: 210px; /* Ajusta el tamaño del logo */
+    width: 180px;
     height: auto;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
+
 
 /* Opcional: para mejorar la visualización del logo dentro del header */
 header .container {
@@ -44,26 +52,91 @@ header .container {
     justify-content: space-between;
 }
 
+a {
+    color: white; /* Color de texto blanco */
+    text-decoration: none; /* Elimina el subrayado por defecto */
+    font-weight: bold; /* Resalta el texto */
+    padding: 5px 15px; /* Espaciado alrededor del texto */
+    border-radius: 20px; /* Bordes redondeados */
+    background-color: rgba(80, 93, 97, 0.467); /* Un verde bonito */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
+}
+
+a:hover {
+    background-color: #300404; /* Un verde más oscuro al pasar el mouse */
+    color: #fff; /* Mantener el color blanco al pasar el mouse */
+}
+
+
+
+h2 {
+    color: var(--accent-color);
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.form-control {
+    border-radius: var(--border-radius);
+    border: 1px solid var(--text-color);
+    padding: 10px;
+}
+
+button[type="submit"] {
+    background-color: var(--accent-color);
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: var(--border-radius);
+    transition: background 0.3s, transform 0.2s;
+}
+
+button[type="submit"]:hover {
+    background-color: #6B0000;
+    transform: translateY(-2px);
+}
+
+.forgot-password-link {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+}
+
+footer {
+    padding: 20px;
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
 /* Estilo mejorado de las tarjetas de datos con tamaño reducido */
 .data-card {
     background: var(--card-bg);
-    border-radius: var(--border-radius);
-    padding: 1rem 0.8rem; /* Reducido de 1.5rem 1rem */
-    margin-bottom: 0.8rem; /* Reducido de 1rem */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    border: 1px solid rgba(0,0,0,0.07);
-    border-bottom: 2px solid var(--accent-color); /* Reducido de 3px */
-    transition: transform 0.2s, box-shadow 0.2s;
-    margin-top: 0;
-    position: relative;
-    overflow: hidden;
+    border-radius: 12px; /* Bordes más pronunciados */
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1); /* Sombra más fuerte */
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-/* Efecto hover mejorado para las tarjetas de datos */
 .data-card:hover {
-    transform: translateY(-2px); /* Reducido de -3px */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* Reducido de 0 5px 12px */
+    transform: translateY(-5px); /* Efecto más marcado */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2); /* Sombra más intensa */
 }
+
 
 /* Estilo para el título de la tarjeta */
 .data-card .card-title {
@@ -194,6 +267,17 @@ header .container {
     border-radius: var(--border-radius);
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
+
+.chart-container {
+    width: 80%; 
+    height: 500px;
+    margin: 30px auto;
+    padding: 20px;
+    background: var(--card-bg);
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
 
 #historicalChart {
     width: 100% !important;  
