@@ -56,7 +56,7 @@ def on_message(client, userdata, msg):
         except Exception as e:
             print(f"❌ Error procesando imagen: {e}")
 
-# --- Inicializar cliente MQTT ---
+# --- Inicializar cliente MQTT nn ---
 mqtt_client = mqtt.Client()
 mqtt_client.on_message = on_message
 mqtt_client.connect(broker, 1883, 60)
