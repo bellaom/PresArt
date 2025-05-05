@@ -31,14 +31,27 @@ def on_message(client, userdata, msg):
                 print("⚠️ Error al decodificar la imagen")
                 return
 
+              # ✅ Mostrar la imagen para prueba
+            cv.imshow("Imagen recibida", frame)
+            cv.waitKey(1)
+            
             # Procesar con YOLO
             results = model(frame, verbose=False)[0]
+            conteo_clases = {}
             for result in results.boxes.data.tolist():
                 _, _, _, _, conf, cls_id = result
-                class_name = model.names[int(cls_id)]
-                mensaje = f'Alerta: {class_name} detectado con {conf:.2f}'
+                cls_id = int(cls_id)
+                class_name = model.names[cls_id]
+                # Incrementar contador de esta clase
+                if class_name in conteo_clases:
+                    conteo_clases[class_name] += 1
+                else:
+                    conteo_clases[class_name] = 1
+            for clase, cantidad in conteo_clases.items():
+                mensaje = f'Alerta: {clase} detectado {cantidad} vez/veces'
                 print(f'🚨 {mensaje}')
                 mqtt_client.publish(topic_alertas, mensaje)
+
 
         except Exception as e:
             print(f"❌ Error procesando imagen: {e}")
