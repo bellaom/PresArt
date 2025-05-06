@@ -1,56 +1,98 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css">
- <!-- Agrega tu CSS personalizado -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ArtCi Museum Preservation System</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-
-  <header>
-    <div class="logo-container">
-      <img src="imagenes/logo.png" alt="Logo del Museo" class="logo">
-    </div>
-  </header>
-
-  <div class="login">
-    <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-4">
-        <div class="login-card">
-          <h2 class="text-center">Welcome back, enter your credentials to continue.</h2>
-
-          <!-- Formulario de login -->
-          <form id="loginForm" method="POST" action="/login">
-            <div class="form-group mb-3">
-              <label for="email">Email Address</label>
-              <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" required />
+    <div class="app-container login-page">
+        <!-- Header with museum-style design -->
+        <header class="header login-header">
+            <div class="container">
+                <div class="logo-container-centered">
+                    <img src="imagenes/logo.png" alt="Logo del Museo" class="logo">
+                    <h1 class="site-title">ArtCi Preservation</h1>
+                </div>
             </div>
-            <div class="form-group mb-3">
-              <label for="password">Password</label>
-              <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required />
+        </header>
+
+        <!-- Main content with artistic background -->
+        <main class="login-main">
+            <!-- Decorative elements -->
+            <div class="decorative-elements">
+                <div class="circle circle-1"></div>
+                <div class="circle circle-2"></div>
+                <div class="circle circle-3"></div>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Sign In</button>
-          </form>
 
-          <!-- Para mostrar errores -->
-          <div id="error" class="text-danger mt-3 text-center"></div>
-        </div>
-      </div>
+            <!-- Login card with museum-inspired design -->
+            <div class="login-card museum-card">
+                <div class="login-card-header">
+                    <h2 class="login-title">Welcome</h2>
+                    <p class="login-description">
+                        Enter your credentials to access the Art Conservation Interface
+                    </p>
+                </div>
+                <div class="login-card-content">
+                    <form id="loginForm" method="POST" action="/login">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input
+                                id="email"
+                                name="email"
+                                placeholder="Enter your email address"
+                                required
+                                type="email"
+                                class="form-input"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                required
+                                type="password"
+                                class="form-input"
+                            >
+                        </div>
+                        <button
+                            type="submit"
+                            class="btn btn-primary full-width"
+                        >
+                            Sign In
+                        </button>
+                    </form>
+                    <div id="error" class="error-message"></div>
+                </div>
+                <div class="login-card-footer">
+                    <p>Authorized Personnel Only — Art Conservation Department</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer with museum information -->
+        <footer class="footer">
+            <div class="container">
+                <p class="text-center">Welcome to Artci Monitoring System</p>
+            </div>
+        </footer>
     </div>
-  </div>
 
-  <footer>
-    <p class="text-center">Welcome to Artci Monitoring System</p>
-  </footer>
-
-  <!-- Bootstrap scripts (solo si los necesitas) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Tu script modular -->
-  <script type="module" src="/script.js"></script>
-
+    <!-- Script modular -->
+    <script type="module" src="/script.js"></script>
 </body>
 </html>

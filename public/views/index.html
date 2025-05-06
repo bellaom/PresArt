@@ -4,97 +4,246 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Museum Data Monitoring</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Incluir Chart.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/style.css">
+    
+    <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Agregar jsPDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Add jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-
-
-
-    <!-- Estilos personalizados -->
-    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <!-- Header flotante con puntas redondeadas -->
-    <header>
-        <div class="container">
-            <div class="logo-container">
-                <img src="imagenes/logo.png" alt="Museo" class="logo">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="container header-container">
+                <div class="logo-container">
+                    <img src="imagenes/logo.png" alt="Museum Logo" class="logo">
+                    <h1 class="site-title">ArtCi Preservation</h1>
+                </div>
+                <a href="/logout" class="btn btn-outline">Cerrar sesión</a>
             </div>
-            <a href="/logout">Cerrar sesión</a> 
-        </div>
-    </header>
+        </header>
 
-    <div class="container-fluid bg-light min-vh-100">
-        <!-- Contenido principal -->
-        <main class="container mt-2">
-            <!-- Contenedor de alertas en tiempo real -->
-                <div id="alertContainer" class="custom-alert-container"></div>
+        <!-- Alert Container -->
+        <div id="alertContainer" class="custom-alert-container"></div>
 
-            <div class="row g-4">
-                <!-- Contenedores de datos a la izquierda -->
-                    <!-- Contenedores de datos a la izquierda -->
-    <div class="col-md-4">
-        <div class="card data-card text-center shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Temperature</h5>
-                <p class="card-text data-value" id="temperature-value">--°C</p>
-            </div>
-        </div>
-        <div class="card data-card text-center shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Humidity</h5>
-                <p class="card-text data-value" id="humidity-value">--%</p>
-            </div>
-        </div>
-        <div class="card data-card text-center shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Luminosity</h5>
-                <p class="card-text data-value" id="luminosity-value">-- lux</p>
-            </div>
-        </div>
-    </div>
-
-                <!-- Contenedor de los datos históricos a la derecha -->
-                <div class="col-md-8">
-                    <div class="historical-section p-4 text-center">
-                        <div class="row justify-content-center">
-                            <div class="col-md-4">
-                                <label for="start-date" class="form-label">Start Date:</label>
-                                <input type="date" id="start-date" class="form-control">
+        <main class="main-content">
+            <div class="container">
+                <div class="dashboard-grid">
+                    <!-- Sidebar with data cards -->
+                    <div class="sidebar">
+                        <div class="card museum-card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-thermometer-half"></i>
+                                    Temperature
+                                </h2>
+                                <div class="card-description">Current reading</div>
                             </div>
-                            <div class="col-md-4">
-                                <label for="end-date" class="form-label">End Date:</label>
-                                <input type="date" id="end-date" class="form-control">
-                            </div>
-                            <div class="col-md-4 d-flex align-items-end">
-                                <button id="fetch-historical" class="btn btn-danger mx-2">Generate Graph</button>
-                                <button id="download-pdf" class="btn btn-warning">Download PDF</button>
+                            <div class="card-content">
+                                <p class="data-value" id="temperature-value">--°C</p>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 65%"></div>
+                                </div>
+                                <p class="range-info">Optimal range: 20-24°C</p>
                             </div>
                         </div>
+
+                        <div class="card museum-card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-droplet"></i>
+                                    Humidity
+                                </h2>
+                                <div class="card-description">Current reading</div>
+                            </div>
+                            <div class="card-content">
+                                <p class="data-value" id="humidity-value">--%</p>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 45%"></div>
+                                </div>
+                                <p class="range-info">Optimal range: 40-60%</p>
+                            </div>
+                        </div>
+
+                        <div class="card museum-card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-sun"></i>
+                                    Luminosity
+                                </h2>
+                                <div class="card-description">Current reading</div>
+                            </div>
+                            <div class="card-content">
+                                <p class="data-value" id="luminosity-value">-- lux</p>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 30%"></div>
+                                </div>
+                                <p class="range-info">Optimal range: 0-200 lux</p>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-outline-primary full-width" onclick="simulateAlert()">
+                            <i class="fas fa-bell"></i> Simulate Alert
+                        </button>
                     </div>
 
-                    <!-- Gráfica -->
-                    <div class="chart-container text-center mt-4">
-                        <canvas id="historicalChart"></canvas>
+                    <!-- Main content area -->
+                    <div class="main-area">
+                        <div class="card museum-card">
+                            <div class="card-header">
+                                <div class="header-flex">
+                                    <div>
+                                        <h2 class="card-title">
+                                            <i class="fas fa-chart-line"></i>
+                                            Historical Data Analysis
+                                        </h2>
+                                        <div class="card-description">Monitor environmental conditions over time</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="date-controls">
+                                    <div class="date-field">
+                                        <label for="start-date">Start Date:</label>
+                                        <input type="date" id="start-date" class="date-input">
+                                    </div>
+                                    <div class="date-field">
+                                        <label for="end-date">End Date:</label>
+                                        <input type="date" id="end-date" class="date-input">
+                                    </div>
+                                    <div class="date-actions">
+                                        <button id="fetch-historical" class="btn btn-primary">
+                                            Generate Graph
+                                        </button>
+                                        <button id="download-pdf" class="btn btn-outline-gold">
+                                            <i class="fas fa-download"></i>
+                                            Download PDF
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Chart container -->
+                                <div class="chart-container">
+                                    <canvas id="historicalChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Info cards -->
+                        <div class="info-cards">
+                            <div class="card museum-card">
+                                <div class="card-header">
+                                    <h2 class="card-title">Artwork Safety</h2>
+                                </div>
+                                <div class="card-content">
+                                    <div class="status-row">
+                                        <span class="status-label">Overall Status</span>
+                                        <span class="status-badge status-good">Optimal</span>
+                                    </div>
+                                    <div class="separator"></div>
+                                    <div class="status-list">
+                                        <div class="status-item">
+                                            <span>Temperature</span>
+                                            <span class="status-text-good">Safe</span>
+                                        </div>
+                                        <div class="status-item">
+                                            <span>Humidity</span>
+                                            <span class="status-text-good">Safe</span>
+                                        </div>
+                                        <div class="status-item">
+                                            <span>Light Exposure</span>
+                                            <span class="status-text-good">Safe</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card museum-card">
+                                <div class="card-header">
+                                    <h2 class="card-title">Recent Alerts</h2>
+                                </div>
+                                <div class="card-content">
+                                    <div class="alert-list">
+                                        <div class="alert-item">
+                                            <div class="alert-dot warning"></div>
+                                            <div>
+                                                <p class="alert-name">Humidity Warning</p>
+                                                <p class="alert-time">Yesterday, 15:42</p>
+                                            </div>
+                                        </div>
+                                        <div class="alert-item">
+                                            <div class="alert-dot danger"></div>
+                                            <div>
+                                                <p class="alert-name">Temperature Alert</p>
+                                                <p class="alert-time">3 days ago, 09:15</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card museum-card">
+                                <div class="card-header">
+                                    <h2 class="card-title">System Status</h2>
+                                </div>
+                                <div class="card-content">
+                                    <div class="status-list">
+                                        <div class="status-item">
+                                            <span>Sensors</span>
+                                            <span class="status-badge status-good">Online</span>
+                                        </div>
+                                        <div class="status-item">
+                                            <span>Data Storage</span>
+                                            <span>78% Free</span>
+                                        </div>
+                                        <div class="status-item">
+                                            <span>Last Update</span>
+                                            <span>2 minutes ago</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
+
+        <footer class="footer">
+            <div class="container">
+                <p>ArtCi Monitoring System — Preserving Cultural Heritage Through Technology</p>
+            </div>
+        </footer>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    <!-- Script for alert simulation -->
+    <script>
+        function simulateAlert() {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `
+                <div class="custom-alert">
+                    <strong>WARNING</strong>
+                    <p>Temperature levels are exceeding safe thresholds for artwork preservation!</p>
+                    <button class="btn-close" onclick="this.parentElement.remove()">×</button>
+                </div>
+            `;
+        }
+    </script>
+    
     <!-- Script personalizado -->
     <script type="module" src="/script.js"></script>
 </body>
-</html>
 
+</html>
