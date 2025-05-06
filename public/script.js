@@ -4,7 +4,7 @@ import { plotGraph } from './charts.js';
 import { generatePDF } from './pdf.js';
 import { initAlertSocket } from './alerts.js';
 import { enviarLogin } from './login.js';
-import { enviarLogin } from './safe.js';
+
 
 
 //Login import
@@ -33,18 +33,6 @@ async function updateSensorData() {
 
 setInterval(updateSensorData, 30000);
 updateSensorData();
-
-//evento de clasificacion de variable
-const tempText = document.getElementById("temperature-value").textContent;
-const humidityText = document.getElementById("humidity-value").textContent;
-const luxText = document.getElementById("luminosity-value").textContent;
-
-const temp = parseFloat(tempText);
-const humidity = parseFloat(humidityText);
-const lux = parseFloat(luxText);
-
-checkArtworkSafety(temp, humidity, lux);
-
 
 // Configurar restricciones de fechas
 setupDateRestrictions();
