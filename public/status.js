@@ -1,4 +1,4 @@
-export function checkArtworkSafety(temp, humidity, lux) {
+export function checkArtworkSafety(temp, humidity, lux) { 
     const tempStatus = document.querySelectorAll(".status-item")[0].children[1];
     const humidityStatus = document.querySelectorAll(".status-item")[1].children[1];
     const lightStatus = document.querySelectorAll(".status-item")[2].children[1];
@@ -7,9 +7,9 @@ export function checkArtworkSafety(temp, humidity, lux) {
     const humidityOk = humidity >= 40 && humidity <= 60;
     const luxOk = lux >= 0 && lux <= 200;
 
-    updateStatus(tempOk, tempStatus);
-    updateStatus(humidityOk, humidityStatus);
-    updateStatus(luxOk, lightStatus);
+    updateStatus(temp, 20, 24, tempStatus, "Temp");
+    updateStatus(humidity, 40, 60, humidityStatus, "Humidity");
+    updateStatus(lux, 0, 200, lightStatus, "Light");
 
     const overallBadge = document.querySelector(".status-badge");
     if (tempOk && humidityOk && luxOk) {
@@ -21,7 +21,17 @@ export function checkArtworkSafety(temp, humidity, lux) {
     }
 }
 
-function updateStatus(isSafe, element) {
-    element.textContent = isSafe ? "Safe" : "In Danger";
-    element.className = isSafe ? "status-text-good" : "status-text-bad";
+
+function updateStatus(value, min, max, element, label) {
+    if (value < min) {
+        element.textContent = `${label} too low`;
+        element.className = "status-text-bad";
+    } else if (value > max) {
+        element.textContent = `${label} too high`;
+        element.className = "status-text-bad";
+    } else {
+        element.textContent = "Safe";
+        element.className = "status-text-good";
+    }
 }
+

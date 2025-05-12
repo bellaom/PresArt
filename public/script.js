@@ -4,6 +4,9 @@ import { plotGraph } from './charts.js';
 import { generatePDF } from './pdf.js';
 import { initAlertSocket } from './alerts.js';
 import { enviarLogin } from './login.js';
+import { checkArtworkSafety } from './status.js';
+
+
 
 
 
@@ -28,6 +31,7 @@ async function updateSensorData() {
     const data = await getSensorData();
     if (data) {
         updateSensorDisplay(data);
+        checkArtworkSafety(data.temperature, data.humidity, data.lux);
     }
 }
 
