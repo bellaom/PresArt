@@ -398,6 +398,11 @@ body {
     color: #065f46;
 }
 
+.status-bad {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
 .separator {
     height: 1px;
     background-color: #e5e7eb;
