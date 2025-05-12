@@ -6,7 +6,12 @@ export function plotGraph(data) {
             chart.destroy();
         }
 
-        const labels = data.map(item => item.timestamp);
+        const labels = data.map(item => new Date(item.timestamp).toLocaleString('es-ES', {
+            hour: '2-digit',
+            minute: '2-digit',
+            day: '2-digit',
+            month: '2-digit'
+        }));
         const tempData = data.map(item => item.temperatura);
         const humidityData = data.map(item => item.humedad);
         const luminosityData = data.map(item => item.luminosidad);
