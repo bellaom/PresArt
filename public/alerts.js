@@ -40,6 +40,40 @@ function showAlert(message) {
     }, 10000);
 }
 
+// función  para actualizar las últimas alertas
+function updateRecentAlerts(message) {
+    const alertList = document.getElementById('recentAlerts');
+    const now = new Date();
+    const timeString = now.toLocaleString('es-ES', {
+        day: '2-digit',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    const alertItem = document.createElement('div');
+    alertItem.classList.add('alert-item');
+
+    
+    const isDanger = message.toLowerCase().includes('temperature');
+    const dotClass = isDanger ? 'danger' : 'warning';
+
+    alertItem.innerHTML = `
+        <div class="alert-dot ${dotClass}"></div>
+        <div>
+            <p class="alert-name">${message}</p>
+            <p class="alert-time">${timeString}</p>
+        </div>
+    `;
+
+    alertList.prepend(alertItem); 
+
+    const alerts = alertList.querySelectorAll('.alert-item');
+    if (alerts.length > 2) {
+        alerts[alerts.length - 1].remove();
+    }
+}
+
 
 
 // Función para inicializar conexión WebSocket y recibir alertas
@@ -54,6 +88,7 @@ export function initAlertSocket() {
         const message = event.data;
         console.log('[WebSocket] Mensaje recibido:', message);
         showAlert(message);
+        updateRecentAlerts(message);
     };
 
     socket.onerror = (error) => {

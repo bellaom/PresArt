@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// Función para actualizar datos de sensores cada 30 segundos
+// Función para actualizar datos de sensores 
 async function updateSensorData() {
     const data = await getSensorData();
     if (data) {
