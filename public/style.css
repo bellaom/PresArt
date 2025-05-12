@@ -426,6 +426,11 @@ body {
     font-weight: 500;
 }
 
+.status-text-bad {
+    color:  #991b1b;
+    font-weight: 500;
+}
+
 /* Alert list */
 .alert-list {
     display: flex;
