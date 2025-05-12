@@ -9,7 +9,8 @@ function showAlert(message) {
 
     
     if (message === lastAlertMessage) return;
-    lastAlertMessage = message;
+    const cleanedMessage = message.split("Alerta: ").pop().trim();
+    lastAlertMessage = cleanedMessage;
 
     const alertSound = new Audio('/imagenes/short-beep-countdown-81121.mp3');
     alertSound.play();
@@ -43,6 +44,7 @@ function showAlert(message) {
 // función  para actualizar las últimas alertas
 function updateRecentAlerts(message) {
     const alertList = document.getElementById('recentAlerts');
+    const cleanedMessage = message.split("Alerta: ").pop().trim();
     const now = new Date();
     const timeString = now.toLocaleString('es-ES', {
         day: '2-digit',
