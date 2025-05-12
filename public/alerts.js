@@ -51,13 +51,17 @@ function updateRecentAlerts(message) {
         minute: '2-digit'
     });
 
-    const alertItem = document.createElement('div');
-    alertItem.classList.add('alert-item');
-
-    
     const isDanger = cleanedMessage.toLowerCase().includes('temperature');
     const dotClass = isDanger ? 'danger' : 'warning';
 
+    const alertData = {
+        text: cleanedMessage,
+        time: timeString,
+        type: dotClass
+    };
+
+    const alertItem = document.createElement('div');
+    alertItem.classList.add('alert-item');
     alertItem.innerHTML = `
         <div class="alert-dot ${dotClass}"></div>
         <div>
@@ -65,14 +69,21 @@ function updateRecentAlerts(message) {
             <p class="alert-time">${timeString}</p>
         </div>
     `;
+    alertList.prepend(alertItem);
 
-    alertList.prepend(alertItem); 
+    let storedAlerts = JSON.parse(localStorage.getItem('recentAlerts')) || [];
+    storedAlerts.unshift(alertData); 
 
+    if (storedAlerts.length > 5) storedAlerts = storedAlerts.slice(0, 5);
+    localStorage.setItem('recentAlerts', JSON.stringify(storedAlerts));
+
+    
     const alerts = alertList.querySelectorAll('.alert-item');
-    if (alerts.length > 2) {
+    if (alerts.length > 5) {
         alerts[alerts.length - 1].remove();
     }
 }
+
 
 
 
