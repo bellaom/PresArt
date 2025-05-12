@@ -31,7 +31,7 @@ async function updateSensorData() {
     const data = await getSensorData();
     if (data) {
         updateSensorDisplay(data);
-        checkArtworkSafety(data.temperature, data.humidity, data.lux);
+        checkArtworkSafety(data.temperatura, data.humedad, data.luminosidad);
     }
 }
 
