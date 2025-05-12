@@ -7,33 +7,29 @@ let lastAlertMessage = null;
 function showAlert(message) {
     const alertContainer = document.getElementById('alertContainer');
 
-    // Evitar mostrar la misma alerta consecutivamente
+    
     if (message === lastAlertMessage) return;
     lastAlertMessage = message;
 
-    // Crear el sonido de alerta
     const alertSound = new Audio('/imagenes/short-beep-countdown-81121.mp3');
     alertSound.play();
 
-    // Crear el div para la alerta
+    
     const alertDiv = document.createElement('div');
     alertDiv.classList.add('alert', 'alert-warning', 'alert-dismissible', 'fade', 'show', 'custom-alert');
     alertDiv.setAttribute('role', 'alert');
     alertDiv.innerHTML = `
         <strong>🚨 WARNING 🚨</strong><br>${message}
         <button type="button" class="btn-close close-btn" data-bs-dismiss="alert" aria-label="Close"></button>
-    `;
-    //mm
+ `;
     // Agregar la alerta al contenedor
     alertContainer.appendChild(alertDiv);
-
-    // ✨ NUEVO: Limitar a máximo 3 alertas visibles
     const alerts = alertContainer.querySelectorAll('.alert');
-    if (alerts.length > 3) {
-        alerts[0].remove(); // Eliminar la más antigua (primer hijo)
+    if (alerts.length > 2) {
+        alerts[0].remove(); 
     }
 
-    // Cerrar la alerta al hacer clic en la X
+
     alertDiv.querySelector('.btn-close').addEventListener('click', () => {
         alertDiv.remove();
     });
