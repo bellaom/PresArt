@@ -5,6 +5,7 @@ import { generatePDF } from './pdf.js';
 import { initAlertSocket } from './alerts.js';
 import { enviarLogin } from './login.js';
 import { checkArtworkSafety } from './status.js';
+import { loadStoredAlerts } from './load.js';
 
 
 
@@ -77,5 +78,9 @@ document.getElementById('download-pdf').addEventListener('click', async () => {
     }
 });
 
-initAlertSocket(); // Activar WebSocket para recibir alertas
-
+// Activar WebSocket para recibir alertas
+// Carga de datos alamcedados en 
+document.addEventListener('DOMContentLoaded', () => {
+    loadStoredAlerts();
+    initAlertSocket();
+});
