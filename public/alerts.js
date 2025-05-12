@@ -2,44 +2,42 @@
 
 // Variable global para guardar el último mensaje mostrado
 let lastAlertMessage = null;
-
-// Función para mostrar alertas en el frontend 
 function showAlert(message) {
     const alertContainer = document.getElementById('alertContainer');
 
-    
-    if (message === lastAlertMessage) return;
+
     const cleanedMessage = message.split("Alerta: ").pop().trim();
+
+    if (cleanedMessage === lastAlertMessage) return;
     lastAlertMessage = cleanedMessage;
 
     const alertSound = new Audio('/imagenes/short-beep-countdown-81121.mp3');
     alertSound.play();
 
-    
     const alertDiv = document.createElement('div');
     alertDiv.classList.add('alert', 'alert-warning', 'alert-dismissible', 'fade', 'show', 'custom-alert');
     alertDiv.setAttribute('role', 'alert');
     alertDiv.innerHTML = `
-        <strong>🚨 WARNING 🚨</strong><br>${message}
+        <strong>🚨 WARNING 🚨</strong><br>${cleanedMessage}
         <button type="button" class="btn-close close-btn" data-bs-dismiss="alert" aria-label="Close"></button>
- `;
-    // Agregar la alerta al contenedor
+    `;
+
     alertContainer.appendChild(alertDiv);
+
     const alerts = alertContainer.querySelectorAll('.alert');
     if (alerts.length > 2) {
         alerts[0].remove(); 
     }
 
-
     alertDiv.querySelector('.btn-close').addEventListener('click', () => {
         alertDiv.remove();
     });
 
-    // Auto-cerrar después de 10 segundos
     setTimeout(() => {
         alertDiv.remove();
     }, 10000);
 }
+
 
 // función  para actualizar las últimas alertas
 function updateRecentAlerts(message) {
@@ -57,7 +55,7 @@ function updateRecentAlerts(message) {
     alertItem.classList.add('alert-item');
 
     
-    const isDanger = message.toLowerCase().includes('temperature');
+    const isDanger = cleanedMessage.toLowerCase().includes('temperature');
     const dotClass = isDanger ? 'danger' : 'warning';
 
     alertItem.innerHTML = `
