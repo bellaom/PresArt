@@ -61,7 +61,7 @@ function updateRecentAlerts(message) {
     alertItem.innerHTML = `
         <div class="alert-dot ${dotClass}"></div>
         <div>
-            <p class="alert-name">${message}</p>
+            <p class="alert-name">${cleanedMessage}</p>
             <p class="alert-time">${timeString}</p>
         </div>
     `;
