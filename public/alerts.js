@@ -74,12 +74,12 @@ function updateRecentAlerts(message) {
     let storedAlerts = JSON.parse(localStorage.getItem('recentAlerts')) || [];
     storedAlerts.unshift(alertData); 
 
-    if (storedAlerts.length > 5) storedAlerts = storedAlerts.slice(0, 5);
+    if (storedAlerts.length > 3) storedAlerts = storedAlerts.slice(0, 3);
     localStorage.setItem('recentAlerts', JSON.stringify(storedAlerts));
 
     
     const alerts = alertList.querySelectorAll('.alert-item');
-    if (alerts.length > 2) {
+    if (alerts.length > 3) {
         alerts[alerts.length - 1].remove();
     }
 }
