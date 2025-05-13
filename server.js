@@ -193,9 +193,13 @@ app.get('/sensor-data', (req, res) => {
 });
 
 // Datos históricos
+// Datos históricos
 app.get('/historical-data', (req, res) => {
     let { startDate, endDate, date } = req.query;
 
+    console.log("GET /historical-data llamado con:", req.query);
+
+    // Si se proporciona solo una fecha específica
     if (date) {
         startDate = date;
         endDate = date;
@@ -205,6 +209,12 @@ app.get('/historical-data', (req, res) => {
         return res.status(400).json({ error: "Se requiere una fecha o un rango de fechas" });
     }
 
+    // Asegurar que el rango incluya todo el día
+    const start = `${startDate} 00:00:00`;
+    const end = `${endDate} 23:59:59`;
+
+    console.log("Consultando entre:", start, "y", end);
+
     const query = `
         SELECT humedad, temperatura, luminosidad, timestamp 
         FROM sensores_data 
@@ -212,7 +222,7 @@ app.get('/historical-data', (req, res) => {
         ORDER BY timestamp ASC;
     `;
 
-    pool.query(query, [startDate, endDate], (err, results) => {
+    pool.query(query, [start, end], (err, results) => {
         if (err) {
             console.error('Error al obtener datos históricos:', err);
             return res.status(500).json({ error: "Error al obtener datos" });
@@ -220,6 +230,7 @@ app.get('/historical-data', (req, res) => {
         res.json(results);
     });
 });
+
 
 // WebSocket y MQTT
 const wss = new WebSocket.Server({ port: 8080 });
