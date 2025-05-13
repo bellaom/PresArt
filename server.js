@@ -54,6 +54,14 @@ let sensorData = {
     timestamp: 'N/A'
 };
 
+
+let lastAlertState = {
+    temperatura: null,
+    humedad: null,
+    luminosidad: null
+};
+
+
 // Función para obtener datos recientes
 function fetchSensorData() {
     pool.query(
@@ -66,6 +74,7 @@ function fetchSensorData() {
                 console.error('Error al obtener los datos:', err);
                 return;
             }
+
             if (results.length > 0) {
                 const row = results[0];
                 sensorData = {
@@ -74,11 +83,41 @@ function fetchSensorData() {
                     luminosidad: row.luminosidad,
                     timestamp: row.timestamp
                 };
+
                 console.log('Datos de sensores actualizados:', sensorData);
+
+                // Evaluar y enviar solo si cambió respecto al último valor
+                if ((row.temperatura < 20 || row.temperatura > 24) && row.temperatura !== lastAlertState.temperatura) {
+                    const msg = `Temperatura fuera de rango: ${row.temperatura} °C`;
+                    mqttClient.publish('arte/alertas', msg);
+                    logger.info(`MQTT -> ${msg}`);
+                    lastAlertState.temperatura = row.temperatura;
+                } else if (row.temperatura >= 20 && row.temperatura <= 24) {
+                    lastAlertState.temperatura = null; // reset si vuelve al rango
+                }
+
+                if ((row.humedad < 40 || row.humedad > 60) && row.humedad !== lastAlertState.humedad) {
+                    const msg = `Humedad fuera de rango: ${row.humedad} %`;
+                    mqttClient.publish('arte/alertas', msg);
+                    logger.info(`MQTT -> ${msg}`);
+                    lastAlertState.humedad = row.humedad;
+                } else if (row.humedad >= 40 && row.humedad <= 60) {
+                    lastAlertState.humedad = null;
+                }
+
+                if ((row.luminosidad < 0 || row.luminosidad > 200) && row.luminosidad !== lastAlertState.luminosidad) {
+                    const msg = `Luminosidad fuera de rango: ${row.luminosidad} lux`;
+                    mqttClient.publish('arte/alertas', msg);
+                    logger.info(`MQTT -> ${msg}`);
+                    lastAlertState.luminosidad = row.luminosidad;
+                } else if (row.luminosidad >= 0 && row.luminosidad <= 200) {
+                    lastAlertState.luminosidad = null;
+                }
             }
         }
     );
 }
+
 
 // Llamada inicial + intervalo
 setInterval(fetchSensorData, 30000);

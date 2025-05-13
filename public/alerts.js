@@ -79,7 +79,7 @@ function updateRecentAlerts(message) {
 
     
     const alerts = alertList.querySelectorAll('.alert-item');
-    if (alerts.length > 5) {
+    if (alerts.length > 2) {
         alerts[alerts.length - 1].remove();
     }
 }
