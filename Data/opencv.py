@@ -58,9 +58,14 @@ def on_message(client, userdata, msg):
                     conteo_clases[class_name] = conteo_clases.get(class_name, 0) + 1
 
             for clase, cantidad in conteo_clases.items():
-                mensaje = f'Alerta: {clase} detectado {cantidad} vez/veces'
-                print(f'🚨 {mensaje}')
-                mqtt_client.publish(topic_alertas, mensaje)
+                if clase == "person" and cantidad > 0:
+                    mensaje = "Alerta: Persona cerca de la Obra, por favor alejarse"
+                else:
+                    mensaje = f"Alerta: {clase} detectado. Por favor, aléjese de la obra"
+                    
+                    print(f'🚨 {mensaje}')
+                    mqtt_client.publish(topic_alertas, mensaje)
+
 
         except Exception as e:
             print(f"❌ Error procesando imagen: {e}")
