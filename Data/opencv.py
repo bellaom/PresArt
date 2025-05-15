@@ -16,6 +16,7 @@ modelo_path = '/home/ubuntu/best.pt'
 # --- Inicializar modelo YOLO ---
 model = YOLO(modelo_path)
 
+#mmm
 # --- Función para procesar cada frame recibido ---
 def on_message(client, userdata, msg):
     if msg.topic == topic_frames:
