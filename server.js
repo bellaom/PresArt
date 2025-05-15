@@ -209,7 +209,6 @@ app.get('/historical-data', (req, res) => {
         return res.status(400).json({ error: "Se requiere una fecha o un rango de fechas" });
     }
 
-    // Asegurar que el rango incluya todo el día
     const start = `${startDate} 00:00:00`;
     const end = `${endDate} 23:59:59`;
 

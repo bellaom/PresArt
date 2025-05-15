@@ -20,10 +20,10 @@ model = YOLO(modelo_path)
 def on_message(client, userdata, msg):
     if msg.topic == topic_frames:
         try:
-            # Decodificar base64 -> bytes
+        
             jpg_bytes = base64.b64decode(msg.payload)
             
-            # Convertir JPEG a imagen OpenCV
+        
             img_array = np.frombuffer(jpg_bytes, dtype=np.uint8)
             frame = cv.imdecode(img_array, cv.IMREAD_COLOR)
 
@@ -31,30 +31,40 @@ def on_message(client, userdata, msg):
                 print("⚠️ Error al decodificar la imagen")
                 return
 
-              # ✅ Mostrar la imagen para prueba
-            cv.imshow("Imagen recibida", frame)
-            cv.waitKey(1)
+            #cv.imshow("Imagen recibida", frame)
+            #cv.waitKey(1)
             
-            # Procesar con YOLO
             results = model(frame, verbose=False)[0]
             conteo_clases = {}
-            for result in results.boxes.data.tolist():
-                _, _, _, _, conf, cls_id = result
-                cls_id = int(cls_id)
+
+            umbral_area = 90000  
+
+            for box in results.boxes:
+                cls_id = int(box.cls[0])
                 class_name = model.names[cls_id]
-                # Incrementar contador de esta clase
-                if class_name in conteo_clases:
-                    conteo_clases[class_name] += 1
+
+                x1, y1, x2, y2 = box.xyxy[0]
+                ancho = (x2 - x1).cpu().item() if hasattr(x2, 'cpu') else (x2 - x1)
+                alto = (y2 - y1).cpu().item() if hasattr(y2, 'cpu') else (y2 - y1)
+                area = ancho * alto
+
+                
+                if class_name == "person":
+                    if area >= umbral_area:
+                        conteo_clases[class_name] = conteo_clases.get(class_name, 0) + 1
+                    else:
+                        pass
                 else:
-                    conteo_clases[class_name] = 1
+                    conteo_clases[class_name] = conteo_clases.get(class_name, 0) + 1
+
             for clase, cantidad in conteo_clases.items():
                 mensaje = f'Alerta: {clase} detectado {cantidad} vez/veces'
                 print(f'🚨 {mensaje}')
                 mqtt_client.publish(topic_alertas, mensaje)
 
-
         except Exception as e:
             print(f"❌ Error procesando imagen: {e}")
+
 
 # --- Inicializar cliente MQTT nn ---
 mqtt_client = mqtt.Client()
