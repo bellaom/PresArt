@@ -28,8 +28,8 @@ def on_message(client, userdata, msg):
                 print("⚠️ Error al decodificar la imagen")
                 return
 
-            cv.imshow("Imagen recibida", frame)
-            cv.waitKey(1)
+            #cv.imshow("Imagen recibida", frame)
+            #cv.waitKey(1)
 
             results = model(frame, verbose=False)[0]
             conteo_clases = {}
