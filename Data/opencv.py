@@ -20,10 +20,7 @@ model = YOLO(modelo_path)
 def on_message(client, userdata, msg):
     if msg.topic == topic_frames:
         try:
-        
             jpg_bytes = base64.b64decode(msg.payload)
-            
-        
             img_array = np.frombuffer(jpg_bytes, dtype=np.uint8)
             frame = cv.imdecode(img_array, cv.IMREAD_COLOR)
 
@@ -33,11 +30,10 @@ def on_message(client, userdata, msg):
 
             #cv.imshow("Imagen recibida", frame)
             #cv.waitKey(1)
-            
+
             results = model(frame, verbose=False)[0]
             conteo_clases = {}
-
-            umbral_area = 90000  
+            umbral_area = 90000
 
             for box in results.boxes:
                 cls_id = int(box.cls[0])
@@ -48,30 +44,25 @@ def on_message(client, userdata, msg):
                 alto = (y2 - y1).cpu().item() if hasattr(y2, 'cpu') else (y2 - y1)
                 area = ancho * alto
 
-                
                 if class_name == "person":
                     if area >= umbral_area:
                         conteo_clases[class_name] = conteo_clases.get(class_name, 0) + 1
-                    else:
-                        pass
                 else:
                     conteo_clases[class_name] = conteo_clases.get(class_name, 0) + 1
 
             for clase, cantidad in conteo_clases.items():
-                if clase == "person" and cantidad > 0:
-                    mensaje = "Alerta: Persona cerca de la Obra, por favor alejarse"
+                if clase == "person":
+                    mensaje = f"Alerta: {cantidad} persona(s) cerca de la Obra, por favor alejarse"
                 else:
-                    mensaje = f"Alerta: {clase} detectado. Por favor, aléjese de la obra"
-                    
-                    print(f'🚨 {mensaje}')
-                    mqtt_client.publish(topic_alertas, mensaje)
+                    mensaje = f"Alerta: {cantidad} {clase}(s) detectado(s). Por favor, aléjese de la obra"
 
+                print(f'🚨 {mensaje}')
+                mqtt_client.publish(topic_alertas, mensaje)
 
         except Exception as e:
             print(f"❌ Error procesando imagen: {e}")
 
-
-# --- Inicializar cliente MQTT nn ---
+# --- Inicializar cliente MQTT ---
 mqtt_client = mqtt.Client()
 mqtt_client.on_message = on_message
 mqtt_client.connect(broker, 1883, 60)
@@ -82,4 +73,3 @@ print("📡 Esperando imágenes por MQTT...")
 while True:
     mqtt_client.loop(timeout=1.0)
     time.sleep(0.1)
-
