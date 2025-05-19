@@ -88,16 +88,23 @@ function fetchSensorData() {
 
                 // Evaluar y enviar solo si cambió respecto al último valor
                 if ((row.temperatura < 20 || row.temperatura > 24) && row.temperatura !== lastAlertState.temperatura) {
-                    const msg = `Temperatura fuera de rango: ${row.temperatura} °C`;
+                    let msg;
+                    if (row.temperatura >= 25 && row.temperatura <= 35) {
+                        msg = `Alerta: Temperatura ${row.temperatura} °C. Asegurarse que el sistema de control esté efectuándose para corregir la temperatura de la obra`;
+                    } else if (row.temperatura > 35) {
+                        msg = `Alerta: Temperatura ${row.temperatura} °C. Dirigirse de manera inmediata al cuadro pues el sistema de control es eficaz pero en ocasiones pueden ser situaciones particulares`;
+                    } else {
+                        msg = `Alerta: Temperatura fuera de rango: ${row.temperatura} °C`;
+                    }
                     mqttClient.publish('arte/alertas', msg);
                     logger.info(`MQTT -> ${msg}`);
                     lastAlertState.temperatura = row.temperatura;
                 } else if (row.temperatura >= 20 && row.temperatura <= 24) {
-                    lastAlertState.temperatura = null; // reset si vuelve al rango
+                    lastAlertState.temperatura = null; 
                 }
 
                 if ((row.humedad < 40 || row.humedad > 60) && row.humedad !== lastAlertState.humedad) {
-                    const msg = `Humedad fuera de rango: ${row.humedad} %`;
+                    const msg = `Alerta:Humedad fuera de rango: ${row.humedad} %`;
                     mqttClient.publish('arte/alertas', msg);
                     logger.info(`MQTT -> ${msg}`);
                     lastAlertState.humedad = row.humedad;
@@ -106,7 +113,7 @@ function fetchSensorData() {
                 }
 
                 if ((row.luminosidad < 0 || row.luminosidad > 200) && row.luminosidad !== lastAlertState.luminosidad) {
-                    const msg = `Luminosidad fuera de rango: ${row.luminosidad} lux`;
+                    const msg = `Alerta:Luminosidad fuera de rango: ${row.luminosidad} lux`;
                     mqttClient.publish('arte/alertas', msg);
                     logger.info(`MQTT -> ${msg}`);
                     lastAlertState.luminosidad = row.luminosidad;
