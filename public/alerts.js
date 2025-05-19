@@ -5,11 +5,7 @@ let lastAlertMessage = null;
 function showAlert(message) {
     const alertContainer = document.getElementById('alertContainer');
 
-
     const cleanedMessage = message.split("Alerta: ").pop().trim();
-
-    if (cleanedMessage === lastAlertMessage) return;
-    lastAlertMessage = cleanedMessage;
 
     const alertSound = new Audio('/imagenes/short-beep-countdown-81121.mp3');
     alertSound.play();
