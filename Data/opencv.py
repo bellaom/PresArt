@@ -18,7 +18,7 @@ modelo_path = '/home/ubuntu/best.pt'
 #broker = '35.174.173.186'
 #topic_alertas = 'arte/alertas'
 #topic_frames = 'camara/imagen'
-#modelo_path = r'C:\Users\Isabella\Pres-Art-Yolo\runs\detect\train2\weights\best.pt'
+#modelo_path = r'C:\Users\Isabella\Pres-Art-Yolo\filtered_dataset\train\weights\best.pt'
 
 # --- Inicializar modelo YOLO ---
 model = YOLO(modelo_path)
